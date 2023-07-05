@@ -1,4 +1,4 @@
-# Basic full inference server based on microservice-gateway architecture
+# Neural Energy - basic full inference server based on microservice-gateway architecture
 
 ## General information
 
