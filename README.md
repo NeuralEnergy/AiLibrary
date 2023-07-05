@@ -1,5 +1,50 @@
 # Neural Energy - basic full inference server based on microservice-gateway architecture
 
+# Romanian Section
+
+## Prezentare / finantare proiect
+
+Repository-ul de cod principal al proiectului „Mobile Neural Powerplant” – cod SMIS 156244. Acest proiect este finanțat în cadrul Programului Operational Competitivitate 2014-2020, Componenta 1: Întreprinderi inovatoare de tip start-up si spin-off - Apel 2022, Axa Prioritară: Cercetare, dezvoltare tehnologica si inovare (CDI) în sprijinul competitivitatii economice si dezvoltarii afacerilor, Operatiunea: Stimularea cererii întreprinderilor pentru inovare prin proiecte CDI derulate de întreprinderi individual sau în parteneriat cu institute de CD si universitati, în scopul inovarii de procese si de produse în sectoarele economice care prezinta potential de crestere.
+
+## Informatii generale
+
+Această secțiune a documentației prezintă aspectele CI/CD, precum și definițiile de bază ale API. Informații suplimentare despre API pot fi găsite în secțiunea de API de mai jos.
+
+> **Notă**
+> În acestă documentație, veți observa diferite valori pentru `ver`, `worker_ver` și `time` în diverse exemple de răspunsuri. Acest lucru se datorează faptului că documentația a fost completată în mod progresiv.
+
+### Aspecte generale ale CI/CD
+
+Toate microserviciile sunt găzduite sub aceeași pasarelă distribuită, permițând procesare pe mai mulți muncitori. Fiecare microserviciu este definit de cel puțin o proprietate - de exemplu, `"SIGNATURE"`.
+Imposibilitatea de a identifica microserviciul va genera o eroare. Operațiunea de `push` a repository-ului principal va declanșa construcția automată a repository-ului DockerHub.
+După construcția automată, este necesară o simplă comandă `http://<server>:5002/shutdown` pentru a reporni și a actualiza containerul Docker de pe server.
+
+
+Pe server, un script simplu controlează containerul prin comanda:
+```
+nohup ./run.sh &
+```
+Această comandă rulează scriptul în fundal. `nohup` vine de la 'no hang up', ceea ce înseamnă că scriptul va continua să ruleze chiar dacă utilizatorul se deconectează sau dacă shell-ul este închis. Operatorul `&` pune procesul în fundal.
+
+Scriptul `run.sh` include următoarele instrucțiuni:
+```
+#!/bin/bash
+
+while true; do
+  sudo docker run --pull=always -p 5002-5010:5002-5010 -v ai_vol:/aid_app/_cache NeuralEnergy/ai_library
+  sleep 5
+done
+```
+Scriptul `run.sh` are scopul de a menține containerul Docker în funcțiune. Dacă containerul Docker se oprește dintr-un motiv oarecare, acest script asigură că o nouă instanță a containerului Docker este pornită după 5 secunde.
+
+Rezultatul este că datele vor rămâne persistente de la o sesiune la alta în `ai_vol`, care este de obicei localizat la `/var/lib/docker/volumes/ai_vol/_data`.
+
+Este recomandată o mașină virtuală (VM) simplă Azure sau AWS cu Ubuntu 18+. Instrucțiunile de instalare se găsesc mai jos. O VM oferă un mediu controlat și izolat, ideal pentru testarea sau implementarea unui software nou. În plus, AWS și Azure oferă resurse de calcul scalabile, ceea ce poate fi benefic dacă aveți nevoie să creșteți sau să reduceți resursele în funcție de cerere.
+
+
+
+# English Section
+
 ## General information
 
 This section of documentation presents CI/CD aspects as well as basic API definitions. Extended API information can be found in below API section.
@@ -24,12 +69,12 @@ The `run.sh` contains the following script:
 #!/bin/bash
 
 while true; do
-  sudo docker run --pull=always -p 5002-5010:5002-5010 -v sw_vol:/safeweb_ai/output safeweb/ai
+  sudo docker run --pull=always -p 5002-5010:5002-5010 -v ai_vol/aid_app/_cache NeuralEnergy/ai_library
   sleep 5
 done
 ```
 
-As a result the data will be persistent from one session to another in the `sw_vol` usually found in `/var/lib/docker/volumes/sw_vol/_data`
+As a result the data will be persistent from one session to another in the `ai_vol` usually found in `/var/lib/docker/volumes/ai_vol/_data`
 
 A simple Azure or AWS Ubuntu 18+ VM is recommanded. See below the installation instructions.
 

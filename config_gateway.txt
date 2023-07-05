@@ -25,8 +25,8 @@
             "DESCRIPTION"   : "dummy_model_b server #1"
         },
 
-        "dummy_model_b": {
-            "SERVER_CLASS"  : "adv_quiz_model",
+        "dummy_model_b-bis": {
+            "SERVER_CLASS"  : "dummy_model_b",
             "NR_WORKERS"    : 2,
             "HOST"          : "127.0.0.1",
             "DISABLED"      : true,
