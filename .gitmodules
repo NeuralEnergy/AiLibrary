@@ -1,0 +1,3 @@
+[submodule "basic_infer_svr"]
+	path = basic_infer_svr
+	url = https://github.com/andreiionutdamian/basic_infer_svr
