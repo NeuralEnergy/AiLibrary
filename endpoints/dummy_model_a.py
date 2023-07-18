@@ -14,7 +14,7 @@ written permission from the author.
 
 """
 
-from libraries.model_server_v2 import FlaskWorker
+from base_infer_svr.utils.model_server_v2.model_server_v2 import FlaskWorker
 
 _CONFIG = {
   'WEIGHT'     : 0,
