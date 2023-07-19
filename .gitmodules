@@ -1,0 +1,3 @@
+[submodule "basic_inference_server"]
+	path = basic_inference_server
+	url = https://github.com/andreiionutdamian/basic_inference_server
