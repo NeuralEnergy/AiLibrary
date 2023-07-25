@@ -22,8 +22,8 @@ import platform
 
 import argparse
 
-from base_infer_svr.utils import Logger
-from base_infer_svr.utils.model_server_v2.gateway import FlaskGateway, get_packages
+from basic_inference_server import Logger
+from basic_inference_server import FlaskGateway, get_packages
 
 from time import sleep
 
