@@ -8,7 +8,7 @@ _CONFIG = {
   'BIAS'      : 0,
 }
 
-class DummyModelBWorker(FlaskWorker):
+class TestModelBWorker(FlaskWorker):
 
   """
   Example implementation of a worker
@@ -18,7 +18,7 @@ class DummyModelBWorker(FlaskWorker):
   """
 
   def __init__(self, **kwargs):
-    super(DummyModelBWorker, self).__init__(prefix_log='[DUMB]', **kwargs)
+    super(TestModelBWorker, self).__init__(prefix_log='[DUMB]', **kwargs)
     return
 
 
@@ -50,4 +50,8 @@ class DummyModelBWorker(FlaskWorker):
   def _post_process(self, pred):
     ### see docstring in parent
     ### abstract method implementation: packs the endpoint answer that will be jsonified
-    return {'dummy_model_predict' : pred}
+    return {
+      'dummy_model_predict' : pred, 
+      'description' : 'Neural Energy inference test endpoint #2',
+
+    }

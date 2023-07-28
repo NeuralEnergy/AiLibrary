@@ -33,7 +33,7 @@ class PlaceholderModel():
   def get_similar(self, **kwargs):
     return "same-word-always"
 
-class DummyModelAWorker(FlaskWorker):
+class TestModelAWorker(FlaskWorker):
 
   """
   Example implementation of a worker
@@ -43,7 +43,7 @@ class DummyModelAWorker(FlaskWorker):
   """
 
   def __init__(self, **kwargs):
-    super(DummyModelAWorker, self).__init__(prefix_log='[DUMA]', **kwargs)
+    super(TestModelAWorker, self).__init__(prefix_log='[DUMA]', **kwargs)
     return
 
 
@@ -86,7 +86,8 @@ class DummyModelAWorker(FlaskWorker):
     ### abstract method implementation: packs the endpoint answer that will be jsonified
     pred, (inputs, lang) = pred
     result = {
-      'dummy_model_a_predict' : pred, 
+      'description' : 'Neural Energy inference test endpoint #1',
+      'test_model_a_predict' : pred, 
       'inputs' : {
         'INPUT_VALUE' : inputs, 
         'LANGUAGE' : lang
