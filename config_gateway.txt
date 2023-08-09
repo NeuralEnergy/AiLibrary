@@ -9,7 +9,6 @@
             "HOST"          : "127.0.0.1",
             "DESCRIPTION"   : "Test server #1"
         },
-
         "test_model_a-bis": {
             "SERVER_CLASS"  : "test_model_a",
             "NR_WORKERS"    : 2,
@@ -18,20 +17,21 @@
             "DESCRIPTION"   : "test_model_a server #2. Redundancy server for test_model_a"
         },
         
-        
-        
         "test_model_b": {
             "NR_WORKERS"    : 2,
             "HOST"          : "127.0.0.1",
             "DESCRIPTION"   : "test_model_b server #1"
         },
-
         "test_model_b-bis": {
             "SERVER_CLASS"  : "test_model_b",
             "NR_WORKERS"    : 2,
             "HOST"          : "127.0.0.1",
             "DISABLED"      : true,
             "DESCRIPTION"   : "test_model_b server #2. Redundancy server for test_model_b"
+        },
+        
+        "telegram_bot" : {
+            "HOST" : "NO_HOST"
         }
     }
 }
