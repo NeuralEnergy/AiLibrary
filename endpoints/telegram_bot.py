@@ -29,16 +29,20 @@ import sys
 cwd = os.getcwd()
 sys.path.append(cwd)
 
-from time import sleep
+from typing import Final
+
+# TOKEN: Final = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+# BOT_USERNAME: Final = '@neural_energy_bot'
 
 DATA_CACHE = {
-  'log' : None,
-  
+  'log'   : None,
+  'bot_token' : os.environ['TELEGRAM_TOKEN'],
+  'bot_name'   : '@neural_energy_bot',
 }
 
 from basic_inference_server import Logger
 
-from typing import Final
+
 
 # pip install python-telegram-bot
 from telegram import Update
@@ -47,8 +51,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 def _log_print(s, color=None):
   DATA_CACHE['log'].P(s, color=color)
 
-TOKEN: Final = '6083297729:AAGIoXdzzESoewpBVWOUKdCqwG0dXMs-21M'
-BOT_USERNAME: Final = '@neural_energy_bot'
 
 
 # Lets us use the /start command
@@ -107,8 +109,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
   # React to group messages only if users mention the bot directly
   if message_type == 'group':
     # Replace with your bot username
-    if BOT_USERNAME in text:
-      new_text: str = text.replace(BOT_USERNAME, '').strip()
+    if DATA_CACHE['bot_name'] in text:
+      new_text: str = text.replace(DATA_CACHE['bot_name'] , '').strip()
       response: str = handle_response(new_text)
     else:
       return  # We don't want the bot respond if it's not mentioned in the group
@@ -127,10 +129,16 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
   
 if __name__ == '__main__':
   l = Logger("TELBOT", base_folder='.', app_folder='_cache')
-  l.P("Starting up Telegram bot v{}...".format(__VER__))
   DATA_CACHE['log'] = l
-  
-  app = Application.builder().token(TOKEN).build()
+  bot_token = DATA_CACHE['bot_token']
+
+  msg = "*   Starting Nee bot v{} {}...   *".format(__VER__, bot_token)
+  l.P('*' * len(msg), color='g')
+  l.P('*' + ' ' * (len(msg) - 2) + '*', color='g')
+  l.P(msg, color='g')
+  l.P('*' + ' ' * (len(msg) - 2) + '*', color='g')
+  l.P('*' * len(msg), color='g')
+  app = Application.builder().token(bot_token).build()
 
   # Commands
   app.add_handler(CommandHandler('start', start_command))
