@@ -11,7 +11,7 @@ Dissemination of this information or reproduction of this material is strictly f
 written permission from the author
 
 """
-__VER__ = '1.0.2'
+__VER__ = '1.0.3'
 
 import numpy as np
 import os
@@ -116,7 +116,7 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
   
 if __name__ == '__main__':
-  l = Logger("TELBOT", base_folder='.', app_folder='_cache')
+  l = Logger("MOTION", base_folder='.', app_folder='_cache')
   eng = OpenAIApp(
     persona='motionmask-funny',
     user=None,
