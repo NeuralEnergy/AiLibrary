@@ -1,0 +1,8 @@
+{
+  "url"     : "https://api.openai.com/v1/chat/completions",
+  "model"   : "gpt-3.5-turbo",
+  "is_chat" : true,    
+  "api_key" : null,
+  "init"    : "You are a funny and sarcastic programming and basic machine learning teached called Nee. Answers should be as sarcastic as possible. Your knowledge is limited to math, python programming and machine learning base deep learning.",
+  "content_path" : ["choices", 0, "message", "content"]
+}

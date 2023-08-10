@@ -6,20 +6,10 @@ This software and its associated documentation are the exclusive property of the
 Unauthorized use, copying, or distribution of this software, or any portion thereof,
 is strictly prohibited.
 
-Parts of this software are licensed and used in software developed by Lummetry.AI.
-Any software proprietary to Knowledge Investment Group SRL is covered by Romanian and  Foreign Patents,
-patents in process, and are protected by trade secret or copyright law.
 
 Dissemination of this information or reproduction of this material is strictly forbidden unless prior
 written permission from the author
 
-
-@copyright: Lummetry.AI
-@author: Lummetry.AI
-@project: 
-@description:
-@created on: Tue Aug  8 18:03:44 2023
-@created by: damia
 """
 __VER__ = '0.2.0'
 
@@ -28,9 +18,9 @@ import os
 import sys
 cwd = os.getcwd()
 sys.path.append(cwd)
+from time import sleep
 
-from typing import Final
-
+# from typing import Final
 # TOKEN: Final = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 # BOT_USERNAME: Final = '@neural_energy_bot'
 
@@ -39,6 +29,24 @@ DATA_CACHE = {
   'bot_token' : os.environ['TELEGRAM_TOKEN'],
   'bot_name'   : '@neural_energy_bot',
 }
+
+WORKING = [
+  'Pregatesc raspunsul...',
+  'Lucrez la raspuns...',
+  'Muncesc, putin rabdare',
+  'Imediat revin...',
+  'Incerc acum sa inteleg...',
+  'Putin rabdare, revin',
+  'Doua secunde te rog, cum ar spune mentorul meu',
+  'Imediat sa vad ce pot raspunde...',
+  'Revin mintenas',
+  'Stai 2 secunde ...',
+  'In lucru acum cu raspunsul tau...',
+  'Acum, acum, revin numaidecat...',
+  'Stai sa ma gandesc...',
+  'Procesez :) ...',
+  'Hmmm....'
+]
 
 from basic_inference_server import Logger
 
@@ -55,7 +63,9 @@ def _log_print(s, color=None):
 
 # Lets us use the /start command
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-  await update.message.reply_text('Salut! Sunt un robot conversational care invata. Ma cheama Nee, cu ce te pot ajuta?')
+  await update.message.reply_text(
+    'Salut! Sunt un robot conversational care invata. Sistemul meu de AI este dezvoltat printr-un grant de finantare aferent proiectului „Mobile Neural Powerplant” – cod SMIS 156244. Acest proiect este finanțat în cadrul Programului Operational Competitivitate 2014-2020, Componenta 1: Întreprinderi inovatoare de tip start-up si spin-off - Apel 2022, Axa Prioritară: Cercetare, dezvoltare tehnologica si inovare (CDI) în sprijinul competitivitatii economice si dezvoltarii afacerilor, Operatiunea: Stimularea cererii întreprinderilor pentru inovare prin proiecte CDI derulate de întreprinderi individual sau în parteneriat cu institute de CD si universitati, în scopul inovarii de procese si de produse în sectoarele economice care prezinta potential de crestere. In cadrul acestui proiect lucreaza mentorul meu iar pe cheama Nee, cu ce te pot ajuta?'
+  )
 
 
 # Lets us use the /help command
@@ -69,6 +79,10 @@ async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 def handle_response(text: str) -> str:
+  
+  _log_print("  Preparing response ...")
+  sleep(2)
+  
   # Create your own response logic
   processed: str = text.lower()
 
@@ -102,24 +116,35 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
   # Get basic info of the incoming message
   message_type: str = update.message.chat.type
   text: str = update.message.text
-
-  # Print a log for debugging
-  _log_print(f'User ({update.message.chat.id}) in {message_type}: "{text}"')
-
+  
+  initiator_id = update.message.from_user.id
+  if update.message.from_user.first_name is not None:
+    initiator_name = update.message.from_user.first_name
+  else:
+    initiator_name = initiator_id
+  
   # React to group messages only if users mention the bot directly
   if message_type == 'group':
     # Replace with your bot username
     if DATA_CACHE['bot_name'] in text:
-      new_text: str = text.replace(DATA_CACHE['bot_name'] , '').strip()
-      response: str = handle_response(new_text)
+      text = text.replace(DATA_CACHE['bot_name'] , '').strip()
+      chat_name = update.message.chat.title
     else:
       return  # We don't want the bot respond if it's not mentioned in the group
   else:
-    response: str = handle_response(text)
+    chat_name = initiator_name
+
+ 
+  # Print a log for debugging
+  _log_print(f'User {initiator_name} ({initiator_id}) in "{chat_name}"({message_type}): "{text}"')
+  await update.message.reply_text(np.random.choice(WORKING))
+  
+  response: str = handle_response(text)
 
   # Reply normal if the message is in private
   _log_print('  Bot resp: {}'.format(response), color='m')
   await update.message.reply_text(response)
+  return
 
 
 # Log errors
@@ -132,7 +157,7 @@ if __name__ == '__main__':
   DATA_CACHE['log'] = l
   bot_token = DATA_CACHE['bot_token']
 
-  msg = "*   Starting Nee bot v{} {}...   *".format(__VER__, bot_token)
+  msg = "*   Starting [Telegram] '{}' bot v{} {}...   *".format(__VER__, DATA_CACHE['bot_name'], bot_token)
   l.P('*' * len(msg), color='g')
   l.P('*' + ' ' * (len(msg) - 2) + '*', color='g')
   l.P(msg, color='g')

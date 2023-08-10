@@ -1,5 +1,6 @@
 FROM aidamian/base_env:x64
 
+# Next line could be redundant
 RUN pip install python-telegram-bot
 
 WORKDIR /aid_app
