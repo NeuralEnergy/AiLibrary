@@ -32,6 +32,10 @@
         
         "telegram_bot" : {
             "HOST" : "NO_HOST"
+        },
+        
+        "motion" : {
+          "HOST" : "NO_HOST"
         }
     }
 }
