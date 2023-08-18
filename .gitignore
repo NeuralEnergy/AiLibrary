@@ -10,6 +10,7 @@ output/
 
 _local_cache/
 
-wdebug.bat
 
 _cache/
+
+.env
