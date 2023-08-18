@@ -57,8 +57,13 @@ def ro_sanitizer(text):
   text = text.replace('Summary:', 'In sumar:')
   return text
 
-def _generate(input_text, model, tokenizer, **kwargs):
+
+def _tokenize(input_text : str, tokenizer: AutoTokenizer):
   inputs = tokenizer.encode(input_text, return_tensors='pt')
+  return inputs
+
+def _generate(input_text : str, model : AutoModelForCausalLM, tokenizer : AutoTokenizer, **kwargs):
+  inputs = _tokenize(input_text=input_text, tokenizer=tokenizer)
   
   outputs = model.generate(
     inputs, 
@@ -88,6 +93,9 @@ class TransformerHelper:
   def P(self, s, color=None):
     self.log.P(s, color=color)
     return
+  
+  def tokenize(self, input_text):
+    return _tokenize(input_text=input_text, tokenizer=self.tokenizer)
   
   def generate(self, input_text, setting='normal'):
     assert setting in PARAMS

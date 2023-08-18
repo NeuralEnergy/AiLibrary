@@ -14,7 +14,12 @@ from basic_inference_server import Logger
 from models.utils import TransformerHelper
 
   
+  
 if __name__ == '__main__':
+  TEST_FULL = False
+  
+  TEST_TOKEN_BY_TOKEN = True
+  
   PROMPTS = [
     'Capitala Frantei este:',
     
@@ -35,19 +40,26 @@ if __name__ == '__main__':
   l = Logger('ROLLM', base_folder='.', app_folder='_cache')
   
   eng1 = TransformerHelper(name='r1', log=l)
-  eng2 = TransformerHelper(name='r2', log=l)
-  engines = [eng1, eng2]
   
-  mem = [round(x.model.get_memory_footprint() / (1024**3),2) for x in engines]
-  l.P(f"Model footprints GB: {mem}")
+  if TEST_TOKEN_BY_TOKEN:
+    m1 = eng1.model
+    inputs = eng1.tokenize(PROMPTS[2])
+    res = m1(inputs)
+    print(res)
   
-  for prompt in PROMPTS:
-    for eng in engines:
-      for setting, color in zip(['normal', 'c1', 'c3', 's3'], [None, 'b', 'y', 'm']):
-        text = eng.generate(prompt, setting=setting)
-        l.P("Result for {} on '{}...', setting: {}:".format(
-          eng.name, prompt[:20], setting), 
-          color='g'
-        )
-        l.P("Text:\n{}".format(text), color=color)
+  if TEST_FULL:
+    eng2 = TransformerHelper(name='r2', log=l)
+    engines = [eng1, eng2]  
+    mem = [round(x.model.get_memory_footprint() / (1024**3),2) for x in engines]
+    l.P(f"Model footprints GB: {mem}")
     
+    for prompt in PROMPTS:
+      for eng in engines:
+        for setting, color in zip(['normal', 'c1', 'c3', 's3'], [None, 'b', 'y', 'm']):
+          text = eng.generate(prompt, setting=setting)
+          l.P("Result for {} on '{}...', setting: {}:".format(
+            eng.name, prompt[:20], setting), 
+            color='g'
+          )
+          l.P("Text:\n{}".format(text), color=color)
+      
