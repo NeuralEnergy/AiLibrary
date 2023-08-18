@@ -27,7 +27,7 @@ nohup ./run.sh &
 Această comandă rulează scriptul în fundal. `nohup` vine de la 'no hang up', ceea ce înseamnă că scriptul va continua să ruleze chiar dacă utilizatorul se deconectează sau dacă shell-ul este închis. Operatorul `&` pune procesul în fundal.
 
 Scriptul `run.sh` include următoarele instrucțiuni:
-```
+```bash
 #!/bin/bash
 
 while true; do
@@ -35,7 +35,7 @@ while true; do
   sleep 5
 done
 ```
-Scriptul `run.sh` are scopul de a menține containerul Docker în funcțiune. Dacă containerul Docker se oprește dintr-un motiv oarecare, acest script asigură că o nouă instanță a containerului Docker este pornită după 5 secunde.
+Scriptul `run.sh` se ruleaza cu `nohup ./run.sh &` si are scopul de a menține containerul Docker în funcțiune. Dacă containerul Docker se oprește dintr-un motiv oarecare, acest script asigură că o nouă instanță a containerului Docker este pornită după 5 secunde.
 
 Rezultatul este că datele vor rămâne persistente de la o sesiune la alta în `ai_vol`, care este de obicei localizat la `/var/lib/docker/volumes/ai_vol/_data`.
 
