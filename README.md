@@ -31,7 +31,7 @@ Scriptul `run.sh` include următoarele instrucțiuni:
 #!/bin/bash
 
 while true; do
-  sudo docker run --pull=always -p 5002-5010:5002-5010 -v ai_vol:/aid_app/_cache neuralenergy/ai_library
+  sudo docker run --rm --name ne_ailib --env-file <path_to_env_file>/.env --pull=always -p 5002-5010:5002-5010 -v ai_vol:/aid_app/_cache neuralenergy/ai_library
   sleep 5
 done
 ```
@@ -69,7 +69,7 @@ The `run.sh` contains the following script:
 #!/bin/bash
 
 while true; do
-  sudo docker run --pull=always -p 5002-5010:5002-5010 -v ai_vol/aid_app/_cache NeuralEnergy/ai_library
+  sudo docker run --rm --name ne_ailib --env-file <path_to_env_file>/.env --pull=always -p 5002-5010:5002-5010 -v ai_vol/aid_app/_cache NeuralEnergy/ai_library
   sleep 5
 done
 ```
@@ -98,13 +98,13 @@ docker build -t localsw .
 #### Docker run
 
 ```
-docker run --pull=always -p 5002-5010:5002-5010 -v ai_vol:/aid_app/_cache org/repo
+docker run --rm --name ne_ailib --env-file <path_to_env_file>/.env --pull=always -p 5002-5010:5002-5010 -v ai_vol:/aid_app/_cache org/repo
 ```
 
 or run locally
 
 ```
-docker run -p 5002-5010:5002-5010 localsw
+docker run --rm --name ne_ailib --env-file <path_to_env_file>/.env -p 5002-5010:5002-5010 localsw
 ```
 
 > **Note**
