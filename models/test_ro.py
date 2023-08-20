@@ -44,20 +44,23 @@ if __name__ == '__main__':
   l = Logger('ROLLM', base_folder='.', app_folder='_cache')
   
   if TEST_LLAMA:
-    models = ['ro-llama-2-7', 'ro-llama-2-13',]
+    models = [
+      'ro-llama-2-7'
+      'ro-llama-2-13', 
+    ]
     precisions = ['float16', 'float32']
     for precision in precisions:
       for model_name in models:
         eng = TransformerHelper(
           name=model_name, 
-          log=l, 
+          log=l,           
           cache_dir='/Lummetry.AI Dropbox/DATA/__LLMs',
-          device_map="auto",
+          device_map="balanced", 
           torch_dtype=th.float16 if precision == 'float16' else th.float32
         )
         setting = 'normal'
         dtype = str(next(eng.model.parameters()).dtype).split('.')[-1]
-        l.P("Generating with {}:{} => {}".format(model_name, dtype, eng.model.hf_device_map), color='y')
+        l.P("Generating with {}:{} => {}".format(model_name, dtype, eng.placement_summary()), color='y')
         for prompt in PROMPTS:
           l.start_timer(model_name + '-' + dtype)
           text = eng.generate(prompt, setting=setting)

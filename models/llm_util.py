@@ -33,7 +33,7 @@ MODELS = {
 }
 
 PARAMS = {
-  "normal"  : dict(max_length=100),
+  "normal"  : dict(max_new_tokens=100),
   "c3"      : dict(
                 penalty_alpha=0.6, 
                 top_k=4, 
@@ -141,6 +141,22 @@ class TransformerHelper:
   
   def decode(self, tokens, input_text=None):
     return _decode(outputs=tokens, tokenizer=self.tokenizer, input_text=input_text)
+  
+  def placement_summary(self):
+    result = ""
+    if hasattr(self.model, 'hf_device_map'):
+      self.placement = self.model.hf_device_map
+      device = None
+      prev_layer = None
+      for layer in self.placement:
+        if device != self.placement[layer]:
+          if device is not None:
+            result = result + layer + ']:{} '.format(self.placement[prev_layer])
+          device = self.placement[layer]
+          result = result + '[{}->'.format(layer)
+          prev_layer = layer
+      result = result + layer + ']:{} '.format(self.placement[layer])
+    return result
   
   
   def step_greedy_generate(self, input_text, callback=lambda x: print(x, end='', flush=True), max_len=50):  
