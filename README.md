@@ -35,6 +35,10 @@ while true; do
   sleep 5
 done
 ```
+
+> **Nota **
+> Din motive de securitate toate cheile secrete vor fi stocate intr-un fisier de tip .env si vor fi folosite la lansarea containerului cu ajutorul parametrului `--env-file` ca in exemplul de mai sus.
+
 Scriptul `run.sh` se ruleaza cu `nohup ./run.sh &` si are scopul de a menține containerul Docker în funcțiune. Dacă containerul Docker se oprește dintr-un motiv oarecare, acest script asigură că o nouă instanță a containerului Docker este pornită după 5 secunde.
 
 Rezultatul este că datele vor rămâne persistente de la o sesiune la alta în `ai_vol`, care este de obicei localizat la `/var/lib/docker/volumes/ai_vol/_data`.
