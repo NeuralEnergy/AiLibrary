@@ -9,6 +9,32 @@ is strictly prohibited.
 Dissemination of this information or reproduction of this material is strictly forbidden unless prior
 written permission from the author
 
+
+  greedy decoding:
+    by calling greedy_search() if num_beams=1 and do_sample=False
+  
+  contrastive search:
+    by calling contrastive_search() if penalty_alpha>0. and top_k>1
+  
+  multinomial sampling:
+    by calling sample() if num_beams=1 and do_sample=True
+  
+  beam-search decoding:
+    by calling beam_search() if num_beams>1 and do_sample=False
+  
+  beam-search multinomial sampling:
+    by calling beam_sample() if num_beams>1 and do_sample=True
+  
+  diverse beam-search decoding:
+    by calling group_beam_search(), if num_beams>1 and num_beam_groups>1
+  
+  constrained beam-search decoding:
+    by calling constrained_beam_search(), if constraints!=None or force_words_ids!=None
+  
+  assisted decoding:
+    by calling assisted_decoding(), if assistant_model is passed to .generate()
+  
+
 """
 
 import os
