@@ -48,8 +48,8 @@ if __name__ == '__main__':
   
   if TEST_LLAMA:
     models = [
-      'ro-llama-2-7'
       'ro-llama-2-13', 
+      'ro-llama-2-7'
     ]
     precisions = ['float16', 'float32']
     for precision in precisions:

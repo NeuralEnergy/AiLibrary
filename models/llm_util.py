@@ -153,7 +153,7 @@ class TransformerHelper:
     self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
     self.P("Loading model {} ...".format(self.name ), color='d')
     self.model = AutoModelForCausalLM.from_pretrained(self.name, **kwargs)
-    self.P("Done loading model.", color='d')
+    self.P("Done loading model: {}.".format(next(self.model.parameters()).dtype), color='d')
     return
   
   
