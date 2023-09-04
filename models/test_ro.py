@@ -13,8 +13,14 @@ written permission from the author
 
 """
 import torch as th
+import os
 
 from time import time
+
+
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv()) # read local .env file
+
 
 from basic_inference_server import Logger
 from models.llm_util import TransformerHelper
@@ -37,10 +43,7 @@ if __name__ == '__main__':
     'Cu ce ma poti ajuta?',
     
     """Asteroidea este denumirea unei clase taxonomice din care fac parte stelele de mare.
-    Asteroideele sunt animale marine care fac parte din ordinul Echinodermata.
-    Stelele de mare cuprind un număr mare de specii care trăiesc în mediul marin, în apropierea coastelor, preferă locurile stâncoase, dar pot fi întâlnite și la adâncimi de 9.000 m, pe nisip sau pe substraturi vegetale.
-    Din studiul fosilelor s-a constatat că stelele de mare există de peste 300 milioane de ani.
-    Un reprezentant mai cunoscut al grupei este specia Asterias rubens
+    Asteroideele sunt animale marine.
     In baza acestui text raspundeti la urmatoarea intrebare: Ce sunt stelele de mare?"""
   ]
   
@@ -48,10 +51,12 @@ if __name__ == '__main__':
   
   if TEST_LLAMA:
     models = [
-      'ro-llama-2-13', 
-      'ro-llama-2-7'
+      # "/Lummetry.AI Dropbox/DATA/__LLMs/_snapshot_llama2_7_ro_v1"
+      'llama-2-70'
+      #'ro-llama-2-13', 
+      #'ro-llama-2-7'
     ]
-    precisions = ['float16', 'float32']
+    precisions = ['float16'] #, 'float32']
     for precision in precisions:
       for model_name in models:
         eng = TransformerHelper(
@@ -59,7 +64,10 @@ if __name__ == '__main__':
           log=l,           
           cache_dir='/Lummetry.AI Dropbox/DATA/__LLMs',
           device_map="balanced", 
-          torch_dtype=th.float16 if precision == 'float16' else th.float32
+          torch_dtype=th.float16 if precision == 'float16' else th.float32,
+          ###
+          use_auth_token=os.environ['HF_TOKEN'],
+          ###
         )
         setting = 'normal'
         dtype = str(next(eng.model.parameters()).dtype).split('.')[-1]

@@ -56,6 +56,7 @@ MODELS = {
   'r2'            : 'readerbench/RoSummary-medium',
   'ro-llama-2-7'  : 'Photolens/llama-2-7b-langchain-chat',
   'ro-llama-2-13' : 'Photolens/llama-2-13b-langchain-chat',
+  'llama-2-70'    : 'meta-llama/Llama-2-70b-chat-hf',
 }
 
 PARAMS = {
@@ -153,7 +154,7 @@ class TransformerHelper:
     self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
     self.P("Loading model {} ...".format(self.name ), color='d')
     self.model = AutoModelForCausalLM.from_pretrained(self.name, **kwargs)
-    self.P("Done loading model: {}.".format(next(self.model.parameters()).dtype), color='d')
+    self.P("Done loading model ({}).".format(next(self.model.parameters()).dtype), color='d')
     return
   
   
@@ -174,14 +175,17 @@ class TransformerHelper:
       self.placement = self.model.hf_device_map
       device = None
       prev_layer = None
+      n = 0
       for layer in self.placement:
         if device != self.placement[layer]:
           if device is not None:
-            result = result + layer + ']:{} '.format(self.placement[prev_layer])
+            result = result + prev_layer + ']({}):{} '.format(n, self.placement[prev_layer])
+            n = 0
           device = self.placement[layer]
           result = result + '[{}->'.format(layer)
-          prev_layer = layer
-      result = result + layer + ']:{} '.format(self.placement[layer])
+          prev_layer = layer          
+        n += 1
+      result = result + layer + ']({}):{} '.format(n, self.placement[layer])
     return result
   
   
