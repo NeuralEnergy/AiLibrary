@@ -6,3 +6,6 @@
 - external: fine tune ro-gpt2 ouputs
 
 - deploy Telegram bot
+
+
+EDNE: bump check push repo
