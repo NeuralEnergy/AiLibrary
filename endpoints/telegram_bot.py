@@ -11,7 +11,7 @@ Dissemination of this information or reproduction of this material is strictly f
 written permission from the author
 
 """
-__VER__ = '0.2.2'
+__VER__ = '0.2.3'
 
 import numpy as np
 import os
