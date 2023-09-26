@@ -60,7 +60,7 @@ MODELS = {
 }
 
 PARAMS = {
-  "normal"  : dict(max_new_tokens=100),
+  "normal"  : dict(max_new_tokens=1000),
   "c3"      : dict(
                 penalty_alpha=0.6, 
                 top_k=4, 
