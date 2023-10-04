@@ -17,6 +17,7 @@ import numpy as np
 import os
 import sys
 cwd = os.getcwd()
+print("{} running from: {}".format(__file__, cwd), flush=True)
 sys.path.append(cwd)
 
 
