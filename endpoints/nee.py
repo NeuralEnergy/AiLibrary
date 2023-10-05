@@ -117,7 +117,7 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
   
 if __name__ == '__main__':
-  l = Logger("MOTION", base_folder='.', app_folder='_cache')
+  l = Logger("NEEBOT", base_folder='.', app_folder='_cache')
   eng = OpenAIApp(
     persona='nee-sarcastic',
     user=None,
