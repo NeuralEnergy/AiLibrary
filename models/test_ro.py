@@ -8,8 +8,17 @@ is strictly prohibited.
 Dissemination of this information or reproduction of this material is strictly forbidden unless prior
 written permission from the author
 
+r1:
+  normal  :
+  c3      : 
+  c1      :
+  s3      : +++
 
-
+r2:
+  normal  :
+  c3      :
+  c1      :
+  s3      : + 
 
 """
 import torch as th
@@ -31,24 +40,34 @@ from models.llm_util import TransformerHelper
 if __name__ == '__main__':
   l = Logger('ROLLM', base_folder='.', app_folder='_cache')
   
-  model_name = 'ro-llama-2-7'
-  prompt1 = 'Capitala Frantei este :'
-  prompt2 = "[INST] Capitala Frantei este : [/INST]"
-    
-  eng = TransformerHelper(
-    name=model_name, 
-    log=l,           
-    cache_dir='/Lummetry.AI Dropbox/DATA/__LLMs',
-    device_map="balanced", 
-    torch_dtype=th.float16
-  )
-  dtype = str(next(eng.model.parameters()).dtype).split('.')[-1]
-  l.P("Generating with {}:{} => {}".format(model_name, dtype, eng.placement_summary()), color='y')
-
-  setting = 'normal'
-  text2 = eng.generate(prompt2, setting=setting)
-  l.P("`{}` results:\n{}".format(prompt2, text2), color='g')
-
-  text1 = eng.generate(prompt1, setting=setting)
-  l.P("`{}` results:\n{}".format(prompt1, text1), color='g')
+  models = [
+    'r1',
+    'r2',
+  ] 
+  prompts = [
+    'Functionezi?',
+    'Ce faci?',
+    'Cum te cheama?',
+  ]
+  settings = [
+    # 'normal',
+    # 'c3',
+    # 'c1',
+    's3',
+  ]
+  
+  for model_name in models:
+    eng = TransformerHelper(
+      name=model_name, 
+      log=l,           
+      cache_dir='/Lummetry.AI Dropbox/DATA/__LLMs',
+      device_map="cpu", 
+      debug=True,
+      torch_dtype=th.float32,
+      low_cpu_mem_usage=True,
+    )
+    for prompt in prompts:    
+      for setting in settings:      
+        text = eng.generate(prompt, setting=setting)
+        l.P("<{}> '{}' results with setting `{}`:\n{}".format(model_name, prompt, setting, text), color='g')
 

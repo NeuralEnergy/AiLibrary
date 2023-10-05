@@ -36,7 +36,7 @@ written permission from the author
   
 
 """
-
+import json
 import os
 import re
 import torch as th
@@ -46,6 +46,7 @@ PATH = "./_cache/_models/llms"
 os.makedirs(PATH, exist_ok=True)
 os.environ["TRANSFORMERS_CACHE"] = PATH
 
+from time import time
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -85,89 +86,117 @@ PARAMS = {
 }
 
 
-def split_into_sentences(paragraph):
-  # The regular expression looks for sentence-ending characters followed by spaces, newlines, or another sentence-ending character.
-  # The positive lookahead (?=...) ensures that the sentence-ending character is matched but not consumed, so it remains part of the resulting sentence.
-  sentences = re.split(r'(?<=[.!?])(?=\s|\w)', paragraph)
-  
-  # Remove any trailing whitespace and return the list of sentences
-  sentences = [sentence.strip() for sentence in sentences if sentence]
-  for i in range(len(sentences)):
-    sentences[i] = sentences[i][0].upper() + sentences[i][1:]
-  return sentences
 
-def ro_sanitizer(text):
-  text = text.replace("ţ", "ț").replace("ş", "ș").replace("Ţ", "Ț").replace("Ş", "Ș")
-  text = text.replace('Summary:', 'In sumar:')
-  return text
-
-
-def _tokenize(input_text : str, tokenizer: AutoTokenizer):
-  th_inputs = tokenizer.encode(input_text, return_tensors='pt')
-  return th_inputs
-
-
-def _paragraph_cleaner(text, max_sentence=3):
-  parts = split_into_sentences(text)
-  output = " ".join(parts[:max_sentence])
-  return output
-
-
-def _decode(outputs, tokenizer : AutoTokenizer, input_text : str = None, max_sentence=3, **kwargs):
-  texts = []
-  for output in outputs:
-    output_text = tokenizer.decode(output, skip_special_tokens=True)
-    text = output_text
-    if input_text is not None:
-      text = text.replace(input_text, "").strip(STRIP_CHARS)  
-    text = ro_sanitizer(text)
-    text = _paragraph_cleaner(text, max_sentence=max_sentence)
-    texts.append(text)
-  return texts
-  
-
-def _generate(input_text : str, model : AutoModelForCausalLM, tokenizer : AutoTokenizer, **kwargs):
-  th_inputs = _tokenize(input_text=input_text, tokenizer=tokenizer)
-  
-  dev = next(model.parameters()).device
-  th_inputs = th_inputs.to(dev)
-  
-  outputs = model.generate(
-    th_inputs, 
-    pad_token_id=tokenizer.eos_token_id,
-    **kwargs,
-  )
-  texts = _decode(outputs, tokenizer=tokenizer)
-  return texts
 
 
 class TransformerHelper:
-  def __init__(self, name, log, **kwargs):
+  def __init__(self, name, log, debug=False, **kwargs):
     self.log = log
+    self.debug = debug
     if name[0] != '/':      
       assert name in MODELS
       self.name = MODELS[name]
+      self.__display_name = name
     else:
-      self.name = name    
+      self.name = name  
+      self.__display_name = name.split('/')[-1]  
     self.kwargs = kwargs
+    t_start = time()
     self.P("Initializing tokenizer {}".format(self.name), color='d')
     self.tokenizer = AutoTokenizer.from_pretrained(self.name, **kwargs)
     self.P("Loading model {} ...".format(self.name ), color='d')
     self.model = AutoModelForCausalLM.from_pretrained(self.name, **kwargs)
-    self.P("Done loading model ({}).".format(next(self.model.parameters()).dtype), color='d')
+    elapsed = time() - t_start
+    self.P("Done loading model ({}) in {:.1f}s".format(next(self.model.parameters()).dtype, elapsed), color='d')
+    self.P("  Placement: {}".format(self.placement_summary()), color='d')
+    self.P("  Memory size: {:.1f} MB".format(self.model_size()), color='d')
     return
   
   
   def P(self, s, color=None):
-    self.log.P(s, color=color)
+    self.log.P("[{}] ".format(self.__display_name) + s, color=color)
     return
   
+  def _split_into_sentences(self, paragraph):
+    # The regular expression looks for sentence-ending characters followed by spaces, newlines, or another sentence-ending character.
+    # The positive lookahead (?=...) ensures that the sentence-ending character is matched but not consumed, so it remains part of the resulting sentence.
+    sentences = re.split(r'(?<=[.!?])(?=\s|\w)', paragraph)
+    
+    # Remove any trailing whitespace and return the list of sentences
+    sentences = [sentence.strip() for sentence in sentences if sentence]
+    for i in range(len(sentences)):
+      sentences[i] = sentences[i][0].upper() + sentences[i][1:]
+    return sentences
+
+  def _ro_sanitizer(self, text):
+    text = text.replace("ţ", "ț").replace("ş", "ș").replace("Ţ", "Ț").replace("Ş", "Ș")
+    text = text.replace("”", '').replace("“", '').replace("„", '')
+    text = text.replace('Summary:', 'In sumar:')
+    return text  
+
+  def _tokenize(self, input_text : str, tokenizer: AutoTokenizer):
+    th_inputs = tokenizer.encode(input_text, return_tensors='pt')
+    return th_inputs
+
+
+  def _paragraph_cleaner(self, text, max_sentence=3):
+    parts = self._split_into_sentences(text)
+    output = " ".join(parts[:max_sentence])
+    return output
+
+
+  def _decode(self, outputs, tokenizer : AutoTokenizer, input_text : str = None, max_sentence=3, **kwargs):
+    texts = []
+    for output in outputs:
+      output_text = tokenizer.decode(output, skip_special_tokens=True)
+      text = output_text
+      if input_text is not None:
+        text = text.replace(input_text, "").strip(STRIP_CHARS)  
+      text = self._ro_sanitizer(text)
+      text = self._paragraph_cleaner(text, max_sentence=max_sentence)
+      texts.append(text)
+    return texts
+
+  def _generate(
+    self, 
+    input_text : str, 
+    model : AutoModelForCausalLM, 
+    tokenizer : AutoTokenizer, 
+    exclude_input : bool = True,
+    **kwargs
+  ):
+    th_inputs = self._tokenize(input_text=input_text, tokenizer=tokenizer)
+    
+    dev = next(model.parameters()).device
+    th_inputs = th_inputs.to(dev)
+    
+    outputs = model.generate(
+      th_inputs, 
+      pad_token_id=tokenizer.eos_token_id,
+      **kwargs,
+    )
+    texts = self._decode(
+      outputs, 
+      tokenizer=tokenizer, 
+      input_text=input_text if exclude_input else None, 
+      **kwargs
+    )
+    return texts
+
+  
   def tokenize(self, input_text):
-    return _tokenize(input_text=input_text, tokenizer=self.tokenizer)
+    return self._tokenize(input_text=input_text, tokenizer=self.tokenizer)
   
   
   def decode(self, tokens, input_text=None):
-    return _decode(outputs=tokens, tokenizer=self.tokenizer, input_text=input_text)
+    return self._decode(outputs=tokens, tokenizer=self.tokenizer, input_text=input_text)
+  
+  def model_size(self):
+    n_params = self.model.num_parameters()
+    dtype = str(next(self.model.parameters()).dtype)
+    bits = int(''.join(filter(str.isdigit, dtype)))
+    size = n_params * bits / 8 / (1024 ** 2)
+    return size # in MB
   
   def placement_summary(self):
     result = ""
@@ -176,22 +205,26 @@ class TransformerHelper:
       device = None
       prev_layer = None
       n = 0
-      for layer in self.placement:
-        if device != self.placement[layer]:
-          if device is not None:
-            result = result + prev_layer + ']({}):{} '.format(n, self.placement[prev_layer])
-            n = 0
-          device = self.placement[layer]
-          result = result + '[{}->'.format(layer)
-          prev_layer = layer          
-        n += 1
-      result = result + layer + ']({}):{} '.format(n, self.placement[layer])
+      if len(self.placement) == 1:
+        _layer = list(self.placement.keys())[0]
+        result = str(self.placement[_layer])
+      else:
+        for layer in self.placement:
+          if device != self.placement[layer]:
+            if device is not None:
+              result = result + prev_layer + ']({}):{} '.format(n, self.placement[prev_layer])
+              n = 0
+            device = self.placement[layer]
+            result = result + '[{}->'.format(layer)
+            prev_layer = layer          
+          n += 1
+        result = result + layer + ']({}):{} '.format(n, self.placement[layer])
     return result
   
   
   def step_greedy_generate(self, input_text, callback=lambda x: print(x, end='', flush=True), max_len=50):  
     self.P("Generating step-by-step with {}:".format(self.name), color='d')
-    th_input = _tokenize(input_text=input_text, tokenizer=self.tokenizer)
+    th_input = self._tokenize(input_text=input_text, tokenizer=self.tokenizer)
     th_curr_input = th_input
     n_generated = 0
     while True:
@@ -203,22 +236,28 @@ class TransformerHelper:
       th_curr_input = th.cat([th_curr_input, th_next_token.unsqueeze(0)], dim=-1)
       if th_next_token[0] == self.tokenizer.eos_token_id or n_generated >= max_len:
         break
-    text = _decode(th_curr_input, tokenizer=self.tokenizer)
+    text = self._decode(th_curr_input, tokenizer=self.tokenizer)
     return text
   
   
   def generate(self, input_text, setting='normal'):
     assert setting in PARAMS
     kwargs = PARAMS[setting]
-    self.P("Generating with {}:{}".format(self.name, kwargs), color='d')
-    texts = _generate(
+    self.P("Generating with {} ({}):{}".format(self.name, setting, kwargs), color='d')
+    t_start = time()
+    texts = self._generate(
       input_text=input_text,
       model=self.model,
       tokenizer=self.tokenizer,
       **kwargs,
     )
+    n_outputs = len(texts)
+    elapsed = time() - t_start
+    self.P("  Done generating {} results in {:.1f}s".format(n_outputs, elapsed), color='d')
+    if n_outputs > 1 and self.debug:
+      self.P("  Results:\n{}".format(json.dumps(texts, indent=2)), color='d')
     result = None
-    if len(texts) > 1:
+    if n_outputs > 1:
       result = np.random.choice(texts)
     else:
       result = texts[0]
