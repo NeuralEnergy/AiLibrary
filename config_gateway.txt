@@ -30,7 +30,7 @@
           "DESCRIPTION"   : "test_model_b server #2. Redundancy server for test_model_b"
         },
         
-        "telegram_bot" : {
+        "nee" : {
           "DISABLED"      : false,
           "HOST" : "NO_HOST"
         },
