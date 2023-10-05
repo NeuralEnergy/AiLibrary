@@ -63,9 +63,9 @@ class ServerMonitor:
     # Memory metrics
     memory = psutil.virtual_memory()
     metrics['memory'] = {
-      'total': memory.total / (1024 ** 3) if self.use_gb else memory.total,
+      'total': self.log.get_machine_memory(gb=self.use_gb),
       'used': memory.used / (1024 ** 3) if self.use_gb else memory.used,
-      'free': memory.free / (1024 ** 3) if self.use_gb else memory.free
+      'free': self.log.get_avail_memory(gb=self.use_gb),
     }
     
     # Disk metrics
@@ -108,10 +108,8 @@ class ServerMonitor:
       
       
     
-  def execute(self):    
-    self.__run_cnt += 1
-    metrics = self._collect_system_metrics()
-    
+  def execute(self):        
+    metrics = self._collect_system_metrics()    
     msg = (
       "T.Mem: {:.1f}GB, U.Mem: {:.1f}GB, F.Mem: {:.1f}GB, "
       "T.Disk: {:.1f}GB, U.Disk: {:.1f}GB, F.Disk: {:.1f}GB, "
@@ -124,10 +122,13 @@ class ServerMonitor:
 
   
     data = dict(
-      msg=msg,
-      **metrics,      
+      run_count=self.__run_cnt,
+      **metrics,            
     )
+    if (self.__run_cnt % 10 == 0):
+      data['msg'] = msg
     self._send_data(data)
+    self.__run_cnt += 1
     return
 
   def run(self):
