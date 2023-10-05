@@ -90,7 +90,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     initiator_name = initiator_id
   
   # React to group messages only if users mention the bot directly
-  if message_type == 'group':
+  if message_type in ['group', 'supergroup']:
     # Replace with your bot username
     if DATA_CACHE['bot_name'] in text:
       text = text.replace(DATA_CACHE['bot_name'] , '').strip()
@@ -101,7 +101,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_name = initiator_name
 
   # Print a log for debugging
-  _log_print(f'User {initiator_name} ({initiator_id}) in "{chat_name}"({message_type}): "{text}"')
+  _log_print(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
   
   response: str = handle_response(user=initiator_id, text=text)
 
