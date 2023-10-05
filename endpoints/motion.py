@@ -20,6 +20,8 @@ cwd = os.getcwd()
 print("{} running from: {}".format(__file__, cwd), flush=True)
 sys.path.append(cwd)
 
+FULL_DEBUG = False
+
 
 # from typing import Final
 # TOKEN: Final = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
@@ -82,26 +84,43 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
   # Get basic info of the incoming message
   message_type: str = update.message.chat.type
   text: str = update.message.text
+  bot_name : str = DATA_CACHE['bot_name']
+  
   
   initiator_id = update.message.from_user.id
   if update.message.from_user.first_name is not None:
     initiator_name = update.message.from_user.first_name
   else:
     initiator_name = initiator_id
+
+  is_bot_in_text = bot_name in text
+  text = text.replace(bot_name , '').strip()
+  chat_name = update.message.chat.title
   
+  if FULL_DEBUG:
+    _log_print(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
+  
+  allow = False
   # React to group messages only if users mention the bot directly
   if message_type in ['group', 'supergroup']:
-    # Replace with your bot username
-    if DATA_CACHE['bot_name'] in text:
-      text = text.replace(DATA_CACHE['bot_name'] , '').strip()
-      chat_name = update.message.chat.title
+    if is_bot_in_text:
+      allow = True
     else:
-      return  # We don't want the bot respond if it's not mentioned in the group
+      reply_to = update.message.reply_to_message
+      if reply_to is not None:
+        _log_print(f"Reply detected on message from {reply_to.from_user} : {reply_to.from_user.username}, isbot={reply_to.from_user.is_bot}")
+        if reply_to.from_user.is_bot:
+          allow = True
   else:
     chat_name = initiator_name
+    allow = True
+  
+  if not allow:
+    return
 
-  # Print a log for debugging
-  _log_print(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
+  if not FULL_DEBUG:
+    # Print a log for debugging
+    _log_print(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
   
   response: str = handle_response(user=initiator_id, text=text)
 
