@@ -16,6 +16,7 @@ TODO:
 """
 
 import json
+import datetime
 import argparse
 import requests
 import psutil
@@ -32,8 +33,9 @@ from basic_inference_server import Logger
 __VER__ = '0.2.1'
 
 class ServerMonitor:
-  def __init__(self, name, log, interval=None, debug=False):
+  def __init__(self, name, log, interval=None, debug=False, use_gb=True):
     self.log = log
+    self.use_gb = use_gb  
     self.__debug = debug
     self.__name = name
     if interval is None:
@@ -43,43 +45,47 @@ class ServerMonitor:
     self.__server = self.log.config_data['SERVER']
     self.__port = self.log.config_data['SERVER_PORT']
     self.__path = self.log.config_data['SERVER_PATH']
-    self.P("ServerMonitor v{} initialized on {}s interval".format(__VER__, self.__interval), color='g')
+    self.P("ServerMonitor v{} initialized on {}s interval".format(__VER__, self.__interval))
+    self.P("  Delay for service sync...")
+    sleep(10)
+    self.P("  Delay done, syncronizing with gateway...")
     return
   
-  def P(self, s, color=None):
+  def P(self, s, color='m'):
     self.log.P(s, color=color)
     return
 
-  def _collect_system_metrics(self, as_gb=True):
-    """
-    Collect system and application metrics including memory and disk usage.
-
-    Parameters:
-      as_gb (bool): Whether to return the metrics in GB.
-
-    Returns:
-      dict: Dictionary containing metrics about system and application.
-    """
+  def _collect_system_metrics(self):
+    """Collect system metrics like memory and disk usage"""
+    
     metrics = {}
     
-    # Conversion factor for bytes to GB
-    to_gb = 1 if not as_gb else (1024 ** 3)
+    # Memory metrics
+    memory = psutil.virtual_memory()
+    metrics['memory'] = {
+      'total': memory.total / (1024 ** 3) if self.use_gb else memory.total,
+      'used': memory.used / (1024 ** 3) if self.use_gb else memory.used,
+      'free': memory.free / (1024 ** 3) if self.use_gb else memory.free
+    }
     
-    # Memory Metrics
-    memory_info = psutil.virtual_memory()
-    metrics['total_memory'] = memory_info.total / to_gb
-    metrics['available_memory'] = memory_info.available / to_gb
-    metrics['system_used_memory'] = memory_info.used / to_gb
-    metrics['app_used_memory'] = psutil.Process().memory_info().rss / to_gb
+    # Disk metrics
+    disk = psutil.disk_usage('/')
+    metrics['disk'] = {
+      'total': disk.total / (1024 ** 3) if self.use_gb else disk.total,
+      'used': disk.used / (1024 ** 3) if self.use_gb else disk.used,
+      'free': disk.free / (1024 ** 3) if self.use_gb else disk.free
+    }
     
-    # Disk Metrics
-    disk_info = psutil.disk_usage('/')
-    metrics['total_disk'] = disk_info.total / to_gb
-    metrics['available_disk'] = disk_info.free / to_gb
+    # CPU metrics
+    cpu_percent = psutil.cpu_percent()
+    cpu_percent_per_core = psutil.cpu_percent(percpu=True)
+    metrics['cpu'] = {
+      'total_percent': cpu_percent,
+      'percent_per_core': cpu_percent_per_core
+    }
     
     return metrics
 
-  
   
   def _send_data(self, data):
     url = None
@@ -97,7 +103,7 @@ class ServerMonitor:
       if self.__debug:
         self.P("Response: {}".format(r.text), color='m')
     except Exception as e:
-      self.P("Error while trying to deliver to {}: {}".format(url, e), color='r')
+      self.P("Error while sending to {}: {}:\n{}".format(url, e, json.dumps(data, indent=2)), color='r')
     return
       
       
@@ -105,14 +111,17 @@ class ServerMonitor:
   def execute(self):    
     self.__run_cnt += 1
     metrics = self._collect_system_metrics()
+    
     msg = (
-      "Total Mem: {:.1f}GB, Avail Mem: {:.1f}GB, "
-      "Sys Used Mem: {:.1f}GB, App Used Mem: {:.1f}GB, Total Disk: {:.1f}GB, Avail Disk: {:.1f}GB"
+      "T.Mem: {:.1f}GB, U.Mem: {:.1f}GB, F.Mem: {:.1f}GB, "
+      "T.Disk: {:.1f}GB, U.Disk: {:.1f}GB, F.Disk: {:.1f}GB, "
+      "T.CPU: {:.1f}%, Cores: {}"
     ).format(
-      metrics['total_memory'], metrics['available_memory'],
-      metrics['system_used_memory'], metrics['app_used_memory'],
-      metrics['total_disk'], metrics['available_disk']
+      metrics['memory']['total'], metrics['memory']['used'], metrics['memory']['free'],
+      metrics['disk']['total'], metrics['disk']['used'], metrics['disk']['free'],
+      metrics['cpu']['total_percent'], metrics['cpu']['percent_per_core']
     )
+
   
     data = dict(
       msg=msg,
@@ -124,9 +133,9 @@ class ServerMonitor:
   def run(self):
     tick = time()
     while True:
+      self.execute()
       while (time() - tick) < self.__interval:
         sleep(0.1)
-      self.execute()
       tick = time()
     return
       
