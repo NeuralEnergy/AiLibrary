@@ -28,7 +28,7 @@ sys.path.append(cwd)
 DATA_CACHE = {
   'log'         : None,
   'engine'      : None,
-  'bot_token'   : os.environ['MOTION_TOKEN'],
+  'bot_token'   : os.environ['TELEGRAM_TOKEN'],
   'bot_name'    : '@neural_energy_bot',
 }
 
