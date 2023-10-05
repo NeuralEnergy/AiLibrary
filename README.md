@@ -1,10 +1,14 @@
 # Neural Energy - basic full inference server based on microservice-gateway architecture
 
+
 # Romanian Section
 
 ## Prezentare / finantare proiect
 
 Repository-ul de cod principal al proiectului „Mobile Neural Powerplant” – cod SMIS 156244. Acest proiect este finanțat în cadrul Programului Operational Competitivitate 2014-2020, Componenta 1: Întreprinderi inovatoare de tip start-up si spin-off - Apel 2022, Axa Prioritară: Cercetare, dezvoltare tehnologica si inovare (CDI) în sprijinul competitivitatii economice si dezvoltarii afacerilor, Operatiunea: Stimularea cererii întreprinderilor pentru inovare prin proiecte CDI derulate de întreprinderi individual sau în parteneriat cu institute de CD si universitati, în scopul inovarii de procese si de produse în sectoarele economice care prezinta potential de crestere.
+
+> **Nota**
+> In repo se regasesc parti dezvoltate de catre contractorul extern Neuroplastic Software SRL. Aceasta renunta la orice drept de proprietate intelectuala in favoarea beneficiarului proiectului, respectiv Neural Energy SRL.
 
 ## Informatii generale
 

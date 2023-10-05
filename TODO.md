@@ -7,5 +7,4 @@
 
 - deploy Telegram bot
 
-
-EDNE: bump check push repo
+- integrare new system monitoring feature from Neuroplastic Software SRL
