@@ -137,7 +137,15 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Log errors
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
   exc = traceback.format_exc()
-  _log_print(f'Update {update} caused error {context.error}\n\nChat data:{context.chat_data}\n\nUser data:{context.user_data}\n\nTrace:{exc}', color='r')
+  msg = (
+    f'Update {update} caused error {context.error}\n\n'
+    f'Bot:       {context.bot.name} {context.bot.username} {context.bot.first_name} {context.bot.last_name}\n'
+    f'Bot data:  {context.bot_data}\n'
+    f'Chat data: {context.chat_data}\n'
+    f'User data: {context.user_data}\n'
+    f'Trace: {exc}'
+  )
+  _log_print(msg, color='r')
   return
 
   
