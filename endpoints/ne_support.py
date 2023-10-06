@@ -113,11 +113,12 @@ class ServerMonitor:
     msg = (
       "T.Mem: {:.1f}GB, U.Mem: {:.1f}GB, F.Mem: {:.1f}GB, "
       "T.Disk: {:.1f}GB, U.Disk: {:.1f}GB, F.Disk: {:.1f}GB, "
-      "T.CPU: {:.1f}%, Cores: {}"
+      "T.CPU: {:.1f}%, Cores: {}, C:{}"
     ).format(
       metrics['memory']['total'], metrics['memory']['used'], metrics['memory']['free'],
       metrics['disk']['total'], metrics['disk']['used'], metrics['disk']['free'],
-      metrics['cpu']['total_percent'], metrics['cpu']['percent_per_core']
+      metrics['cpu']['total_percent'], metrics['cpu']['percent_per_core'],
+      self.__run_cnt,
     )
 
   
@@ -125,7 +126,7 @@ class ServerMonitor:
       run_count=self.__run_cnt,
       **metrics,            
     )
-    if (self.__run_cnt % 10 == 0):
+    if (self.__run_cnt % 50 == 0):
       data['msg'] = msg
     self._send_data(data)
     self.__run_cnt += 1
