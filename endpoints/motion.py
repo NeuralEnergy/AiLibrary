@@ -41,7 +41,7 @@ from models.api.app import OpenAIApp
 
 
 # pip install python-telegram-bot
-from telegram import Update
+from telegram import Update, Message
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 def _log_print(s, color=None):
@@ -81,21 +81,24 @@ def handle_response(user: str, text: str) -> str:
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+  message : Message = update.message
+  if message is None:
+    return
   # Get basic info of the incoming message
-  message_type: str = update.message.chat.type
-  text: str = update.message.text
+  message_type: str = message.chat.type
+  text: str = message.text
   bot_name : str = DATA_CACHE['bot_name']
   
   
-  initiator_id = update.message.from_user.id
-  if update.message.from_user.first_name is not None:
-    initiator_name = update.message.from_user.first_name
+  initiator_id = message.from_user.id
+  if message.from_user.first_name is not None:
+    initiator_name = message.from_user.first_name
   else:
     initiator_name = initiator_id
 
   is_bot_in_text = bot_name in text
   text = text.replace(bot_name , '').strip()
-  chat_name = update.message.chat.title
+  chat_name = message.chat.title
   
   if FULL_DEBUG:
     _log_print(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
@@ -106,7 +109,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if is_bot_in_text:
       allow = True
     else:
-      reply_to = update.message.reply_to_message
+      reply_to = message.reply_to_message
       if reply_to is not None:
         _log_print(f"Reply detected on message from {reply_to.from_user} : {reply_to.from_user.username}, isbot={reply_to.from_user.is_bot}")
         if reply_to.from_user.is_bot:
@@ -126,13 +129,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
   # Reply normal if the message is in private
   _log_print('  Bot resp: {}'.format(response), color='m')
-  await update.message.reply_text(response)
+  await message.reply_text(response)
   return
 
 
 # Log errors
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-  _log_print(f'Update {update} caused error {context.error}', color='r')
+  _log_print(f'Update {update} caused error {context.error}, full context:\n{context}', color='r')
 
   
 if __name__ == '__main__':
