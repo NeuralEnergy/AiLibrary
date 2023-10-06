@@ -14,6 +14,7 @@ written permission from the author
 __VER__ = '1.1.4'
 
 import numpy as np
+import traceback
 import os
 import sys
 cwd = os.getcwd()
@@ -111,7 +112,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
       reply_to = message.reply_to_message
       if reply_to is not None:
-        _log_print(f"Reply detected on message from {reply_to.from_user} : {reply_to.from_user.username}, isbot={reply_to.from_user.is_bot}")
+        _log_print(f"Reply from '{initiator_name}' to {reply_to.from_user} ")
         if reply_to.from_user.is_bot:
           allow = True
   else:
@@ -135,7 +136,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 # Log errors
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-  _log_print(f'Update {update} caused error {context.error}, full context:\n{context}', color='r')
+  exc = traceback.format_exc()
+  _log_print(f'Update {update} caused error {context.error}\n\nChat data:{context.chat_data}\n\nUser data:{context.user_data}\n\nTrace:{exc}', color='r')
+  return
 
   
 if __name__ == '__main__':
