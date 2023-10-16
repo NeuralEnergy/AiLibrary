@@ -30,7 +30,7 @@ from time import sleep, time
 
 from basic_inference_server import Logger
 
-__VER__ = '0.2.1'
+__VERSION__ = '0.2.1'
 
 class ServerMonitor:
   def __init__(self, name, log, interval=None, debug=False, use_gb=True):
@@ -45,7 +45,7 @@ class ServerMonitor:
     self.__server = self.log.config_data['SERVER']
     self.__port = self.log.config_data['SERVER_PORT']
     self.__path = self.log.config_data['SERVER_PATH']
-    self.P("ServerMonitor v{} initialized on {}s interval".format(__VER__, self.__interval))
+    self.P("ServerMonitor v{} initialized on {}s interval".format(__VERSION__, self.__interval))
     self.P("  Delay for service sync...")
     sleep(10)
     self.P("  Delay done, syncronizing with gateway...")

@@ -11,7 +11,7 @@ Dissemination of this information or reproduction of this material is strictly f
 written permission from the author
 
 """
-__VER__ = '1.1.4'
+__VERSION__ = '1.1.4'
 
 import numpy as np
 import os
@@ -162,7 +162,9 @@ if __name__ == '__main__':
   bot_token = DATA_CACHE['bot_token']
   
 
-  msg = "*   Starting [Telegram] '{}' bot v{} {}...   *".format(DATA_CACHE['bot_name'], __VER__, bot_token)
+  msg = "*   Starting [Telegram] '{}' bot v{} {}...   *".format(
+    DATA_CACHE['bot_name'], __VERSION__, bot_token
+  )
   l.P('*' * len(msg), color='g')
   l.P('*' + ' ' * (len(msg) - 2) + '*', color='g')
   l.P(msg, color='g')

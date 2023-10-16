@@ -13,7 +13,7 @@ Dissemination of this information or reproduction of this material is strictly f
 written permission from the author.
 
 """
-
+from time import time, sleep
 from basic_inference_server import FlaskWorker
 
 _CONFIG = {
@@ -28,6 +28,8 @@ class PlaceholderModel():
   def __init__(self, log):
     self.log = log
     self.log.P("******** Using a model placeholder *********", color='r')
+    self.log.P("Simulating a SLOW loading model", color='r')
+    sleep(30)
     return 
   
   def get_similar(self, **kwargs):
