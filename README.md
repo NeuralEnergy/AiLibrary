@@ -10,7 +10,13 @@ Repository-ul de cod principal al proiectului „Mobile Neural Powerplant” –
 > **Nota**
 > In repo se regasesc parti dezvoltate de catre contractorul extern Neuroplastic Software SRL. Aceasta renunta la orice drept de proprietate intelectuala in favoarea beneficiarului proiectului, respectiv Neural Energy SRL.
 
-## Informatii generale
+## Istoric
+
+ - 2023-10-01 - (in lucru) - Dezvoltare MVP faza 2 incluzand module de supervizare si depanare si aplicatii demonstrative
+ - 2023-07-01 - 2023-09-31 - Dezvoltare MVP faza 1 incluzand integrarea submodule-ului `basic_inference_server`
+ - 2023-03-01 - 2023-06-31 - Pregatirea principalelor componente la nivel de prototip nefunctional (inclusiv documentatia aferenta)
+ 
+## Implementare si productizare
 
 Această secțiune a documentației prezintă aspectele CI/CD, precum și definițiile de bază ale API. Informații suplimentare despre API pot fi găsite în secțiunea de API de mai jos.
 
@@ -19,13 +25,13 @@ Această secțiune a documentației prezintă aspectele CI/CD, precum și defini
 
 ### Aspecte generale ale CI/CD
 
-Toate microserviciile sunt găzduite sub aceeași pasarelă distribuită, permițând procesare pe mai mulți muncitori. Fiecare microserviciu este definit de cel puțin o proprietate - de exemplu, `"SIGNATURE"`.
+Toate microserviciile sunt găzduite sub aceeași arhitectura distribuită, permițând procesare pe mai mulți muncitori. Fiecare microserviciu este definit de cel puțin o proprietate - de exemplu, `"SIGNATURE"`.
 Imposibilitatea de a identifica microserviciul va genera o eroare. Operațiunea de `push` a repository-ului principal va declanșa construcția automată a repository-ului DockerHub.
 După construcția automată, este necesară o simplă comandă `http://<server>:5002/shutdown` pentru a reporni și a actualiza containerul Docker de pe server.
 
 
 Pe server, un script simplu controlează containerul prin comanda:
-```
+```bash
 nohup ./run.sh &
 ```
 Această comandă rulează scriptul în fundal. `nohup` vine de la 'no hang up', ceea ce înseamnă că scriptul va continua să ruleze chiar dacă utilizatorul se deconectează sau dacă shell-ul este închis. Operatorul `&` pune procesul în fundal.
@@ -236,3 +242,14 @@ Getting system status requires a simple API call `POST <address>:5002/run`:
 }
 ```
 
+# Citation / citare
+
+Please use the following bibtex entry / In situatia utilizarii bibliotecii va rugam citati in urmatorul mod:
+
+```bibtex
+@article{aid2023neuralenergy,
+  title={Mobile Neural Powerplant},
+  author={Damian, Andrei Ionut and Cristea, Mihai and Nemes, Ovidiu},
+  year={2023}
+}
+``````
