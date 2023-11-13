@@ -25,7 +25,7 @@ from models.llm_util import TransformerHelper
 if __name__ == '__main__':
   TEST_LLAMA  = True    
   TEST_FULL   = False  
-  TEST_STEP   = False
+  TEST_STEP   = False # token by token generation and printout
   
   PROMPTS = [
     'Capitala Frantei este:',
