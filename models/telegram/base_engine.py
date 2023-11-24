@@ -14,7 +14,14 @@ FULL_DEBUG = False
 
 
 class TelegramChatbot(object):
-  def __init__(self, log, bot_name, token_env_name, persona, persona_location='./models/personas/'):
+  def __init__(
+    self, 
+    log, 
+    bot_name, 
+    token_env_name, 
+    persona, 
+    persona_location='./models/personas/'
+  ):
     super().__init__()
     assert log is not None, "log cannot be None"
     assert isinstance(bot_name, str), "bot_name must be a string. Provided: {}".format(bot_name)
