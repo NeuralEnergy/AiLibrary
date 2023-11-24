@@ -12,9 +12,12 @@ Repository-ul de cod principal al proiectului „Mobile Neural Powerplant” –
 
 ## Istoric
 
- - 2023-10-01 - (in lucru) - Dezvoltare MVP faza 2 incluzand module de supervizare si depanare si aplicatii demonstrative
- - 2023-07-01 - 2023-09-31 - Dezvoltare MVP faza 1 incluzand integrarea submodule-ului `basic_inference_server`
- - 2023-03-01 - 2023-06-31 - Pregatirea principalelor componente la nivel de prototip nefunctional (inclusiv documentatia aferenta)
+- [x] 2023-10-01 - (in lucru) - Dezvoltare MVP faza 2 incluzand module de supervizare si depanare si aplicatii demonstrative
+- [x] 2023-07-01 - 2023-09-31 - Dezvoltare MVP faza 1 incluzand integrarea submodule-ului `basic_inference_server`
+- [x] 2023-03-01 - 2023-06-31 - Pregatirea principalelor componente la nivel de prototip nefunctional (inclusiv documentatia aferenta)
+- [x] 2023-06-31 - 2023-10-01 - Dezvoltarea primului prototip functional de chatbot rulabil in mediul Neural Energy AI Engine si integrarea acestuia in aplicatia de tip chatbot Telegram
+- [x] 2023-10-01 - 2023-11-24 - Refactorizari si imbunatatiri pentru aducerea prototipului la un stadiu avansat de operationalizare si productizare
+- [ ] 2023-11-24 - 2023-12-31 - Finalizarea livrabilelor in curs de lucru si pregatirea documentatiei finale
 
 > Statusul actual se poate regasi in [TODO.md](TODO.md)
  
