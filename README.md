@@ -15,6 +15,8 @@ Repository-ul de cod principal al proiectului „Mobile Neural Powerplant” –
  - 2023-10-01 - (in lucru) - Dezvoltare MVP faza 2 incluzand module de supervizare si depanare si aplicatii demonstrative
  - 2023-07-01 - 2023-09-31 - Dezvoltare MVP faza 1 incluzand integrarea submodule-ului `basic_inference_server`
  - 2023-03-01 - 2023-06-31 - Pregatirea principalelor componente la nivel de prototip nefunctional (inclusiv documentatia aferenta)
+
+> Statusul actual se poate regasi in [TODO.md](TODO.md)
  
 ## Implementare si productizare
 
