@@ -1,11 +1,11 @@
 # A.1.1
 
 - [x] Refacerea structurii serverului gateway si refactorizarea folosind tiparul arhitectural de  “mixin”
-- [ ] Refacerea structurii serverului template de microservicii si refactorizarea folosind tiparul arhitectural de “mixin”
-- [ ] Pregatirea unui script de tip “debug containerizat”  pentru biblioteca
-- [ ] Integrarea proceselor de tip suport (inceputa in perioada de referinta curenta a raportului)
+- [x] Refacerea structurii serverului template de microservicii si refactorizarea folosind tiparul arhitectural de “mixin”
+- [x] Pregatirea unui script de tip “debug containerizat”  pentru biblioteca
+- [x] Integrarea proceselor de tip suport (inceputa in perioada de referinta curenta a raportului)
 - [ ] Experimentarea cu backend-ul de calcul paralel tensorial MPS
-- [ ] Lansarea versiunii 8.5 a bibliotecii de baza integrate in “Mobile Neural Powerplant” (initial 7.0) si in final release-ul 9.0 (la finalizarea proiectului)
+- [x] Lansarea versiunii 8.5 a bibliotecii de baza integrate in “Mobile Neural Powerplant” (initial 7.0) si in final release-ul 9.0 (la finalizarea proiectului)
 - [ ] Sprijinirea activitatilor A3.1 pentru realizarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana prin utilizarea readerbench/ro-offense
 
 
@@ -32,5 +32,5 @@
 
 # A.3.1
 
-- [ ] Rafinarea chatbot-ului Telegram cu capacitati neurale avansate si transformarea acestuia intr-un tipar replicabil 
+- [x] Rafinarea chatbot-ului Telegram cu capacitati neurale avansate si transformarea acestuia intr-un tipar replicabil 
 - [ ] Implementarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana. 
