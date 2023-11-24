@@ -1,4 +1,4 @@
-FROM aidamian/base_env:x64
+FROM aidamian/base_llm_env:latest
 
 
 WORKDIR /aid_app
@@ -10,7 +10,7 @@ ENV TZ Europe/Bucharest
 ENV AID_APP_DOCKER Yes
 ENV SHOW_PACKS Yes
 ENV FORCE_CPU No
-ENV AID_APP_ID BaseAidApp
+ENV AID_APP_ID NeuralEnergyAiLibrary
 
 ENV PYTHONPATH .
 

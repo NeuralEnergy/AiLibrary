@@ -1,4 +1,4 @@
-FROM aidamian/base_env:x64
+FROM aidamian/base_llm_env:latest
 
 WORKDIR /workspaces
 
