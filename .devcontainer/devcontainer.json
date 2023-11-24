@@ -1,0 +1,29 @@
+{
+  "name": "Neural Energy dev container",
+  "dockerFile": "Dockerfile",
+  "runArgs": [
+    "--env-file=.env",
+    "--name=neural-energy-devcontainer",
+    "-p","5002-5010:5002-5010"
+  ],
+
+  // VSCode extensions
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			"settings": {},
+			"extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "ms-python.python",
+        "GitHub.copilot",
+        "github.vscode-github-actions",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker", 
+        "ms-toolsai.jupyter",
+        "njpwerner.autodocstring" 
+    
+			]
+		}
+	}
+}
