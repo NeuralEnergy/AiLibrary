@@ -82,12 +82,12 @@ if __name__ == '__main__':
   in_debug = runs_with_debugger()
   running_in_docker = os.environ.get('AID_APP_DOCKER', False) == "Yes"
   ee_id = os.environ.get('AID_APP_ID', 'aid_app_bare_metal')
-  show_packs = os.environ.get('SHOW_PACKS')
+  show_packs = os.environ.get('AID_APP_SHOW_PACKS')
   tz = os.environ.get('TZ', None)
   path = os.getcwd()
   log.P("Running in DEBUG mode" if in_debug else "Running in normal mode (NO debug enabled)")
   packs = get_packages()
-  log.P("Running {} test v{} (lib v{}) '{}', TZ: {}, py: {}, OS: {}, Docker: {}".format(
+  log.P("Running {} v{}\n - Lib: v{}\n - Dir: '{}'\n - TZ:  {}\n - Py:  {}\n - OS:  {}\n - Dkr: {}".format(
     ee_id,
     APP_VER, LIB_VER,
     path, 
@@ -98,7 +98,7 @@ if __name__ == '__main__':
     ), color='g'
   )  
   log.P("Show packages: {}".format(show_packs))
-  if show_packs in ['Yes', 'YES', 'yes']:
+  if isinstance(show_packs, str) and show_packs.lower() in ['yes', 'y', 'true', 't', '1']:
     log.P("Packages: \n{}".format("\n".join(packs)))
     
   sleep(3)

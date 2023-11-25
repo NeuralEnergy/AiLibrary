@@ -14,7 +14,7 @@ if __name__ == '__main__':
   eng = TelegramChatbot(
     log=l, 
     bot_name='@Motionmask_bot',
-    token_env_name='MOTION_TOKEN', 
+    token_env_name='NEAIL_MOTION_TOKEN', 
     persona='motionmask-funny',
   )
 

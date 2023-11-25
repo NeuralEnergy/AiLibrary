@@ -20,7 +20,7 @@ if __name__ == '__main__':
   eng = TelegramChatbot(
     log=l, 
     bot_name='@neural_energy_bot',
-    token_env_name='TELEGRAM_TOKEN', 
+    token_env_name='NEAIL_TELEGRAM_TOKEN', 
     persona='nee-sarcastic',
   )
 

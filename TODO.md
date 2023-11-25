@@ -17,6 +17,7 @@
   - [ ] Serializare informatie
   - [ ] Sumarizare 
   - [ ] Alertare
+  - [ ] Adaugare/finalizare `support_update_status` pentru fiecare semnatura de tip suport
 - [ ] Elemente nivel jos: adaugarea de monitorizare de procese si thread-uri la nivel de sistem
 - [ ] Endpoint /support_update_status: similar cu sisteme de monitorizare care ofera puncte de verificare a sanatații, este crucial ca acest endpoint sa fie verificat si testat riguros.
 - [ ] Analiza de serie de Timp: aceasta este o direcție de evoluție importanta, care poate îmbogați valoarea datelor colectate, similar cu ce ofera soluții precum InfluxDB (https://www.influxdata.com/).
