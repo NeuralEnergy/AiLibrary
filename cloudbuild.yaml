@@ -25,9 +25,9 @@ steps:
     - 'gcr.io/$PROJECT_ID/ne-ailib'
     - '--region'
     - '$LOCATION'  # desired region
-    - '--set-env-vars'
+    - '--set-env-vars' # each env var must be defined in the GCP trigger Substitution variables
     - >
-      NEAIL_TELEGRAM_TOKEN=$_NEAIL_TELEGRAM_TOKEN,
+      NEAIL_TELEGRAM_TOKEN=$_NEAIL_TELEGRAM_TOKEN, 
       NEAIL_MOTION_TOKEN=$_NEAIL_MOTION_TOKEN,
       NEAIL_GPT_KEY=$_NEAIL_GPT_KEY,
       NEAIL_HF_TOKEN=$_NEAIL_HF_TOKEN  # Split environment variables
@@ -35,9 +35,9 @@ steps:
     - '--port'
     - '5002'
     - '--memory'
-    - '2Gi'
+    - '2Gi'     # increase memory limit from basic of 512MB
     - '--cpu'
-    - '2'    
+    - '2'       # increase CPU limit from basic of 1
     # Additional Cloud Run configurations can be added here
 
 images:
