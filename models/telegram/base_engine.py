@@ -118,7 +118,7 @@ class TelegramChatbot(object):
       self.P(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
     
 
-    await context.bot.bot.send_chat_action(chat_id=chat_id, action=telegram.constants.ChatAction.TYPING)
+    await context.bot.send_chat_action(chat_id=chat_id, action=telegram.constants.ChatAction.TYPING)
     response: str = self.handle_response(user=initiator_id, text=text)
 
     # Reply normal if the message is in private
