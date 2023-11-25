@@ -1,6 +1,7 @@
 import os
 import traceback
 
+import telegram
 from telegram import Update, Message
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
@@ -79,8 +80,9 @@ class TelegramChatbot(object):
     text: str = message.text
     bot_name : str = self.__bot_name
     
-    
+    chat_id = update.effective_message.chat_id    
     initiator_id = message.from_user.id
+    
     if message.from_user.first_name is not None:
       initiator_name = message.from_user.first_name
     else:
@@ -115,6 +117,8 @@ class TelegramChatbot(object):
       # Print a log for debugging
       self.P(f'User {initiator_name} ({initiator_id}) in `{chat_name}` ({message_type}): "{text}"')
     
+
+    await context.bot.bot.send_chat_action(chat_id=chat_id, action=telegram.constants.ChatAction.TYPING)
     response: str = self.handle_response(user=initiator_id, text=text)
 
     # Reply normal if the message is in private
