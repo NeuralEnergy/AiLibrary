@@ -37,17 +37,19 @@ class TelegramChatbot(object):
     self.__persona_location = persona_location
     self.__persona = persona
     self.__eng : OpenAIApp = None
+    self.__app : Application = None
+    
+    self.__build()
     return
      
-  def P(self, s, color=None):    
-    self.__log.P("[{}] ".format(self.__bot_name) + s, color=color)
+  def P(self, s, color=None, boxed=False):    
+    self.__log.P(s, color=color, boxed=boxed)
     
     
   def __build(self):
     self.P("Starting up {} '{}' v{}...".format(
       self.__class__.__name__,self.__bot_name, __VERSION__
       ),
-      color='g'
     )
     eng = OpenAIApp(
       persona=self.__persona,
@@ -56,16 +58,17 @@ class TelegramChatbot(object):
       persona_location=self.__persona_location,
     )
     self.__eng = eng
+    self.P("Finished initialization of neural engine.", color='g')
     return
     
 
-  def handle_response(self, user: str, text: str) -> str:
-    
+  def handle_response(self, user: str, text: str) -> str:    
     self.P("  Preparing response for {}...".format(user))    
     # Create your own response logic
     processed: str = text.lower()    
     answer = self.__eng.ask(question=processed, user=str(user))
     return answer    
+  
   
   async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
     message : Message = update.message
@@ -136,7 +139,8 @@ class TelegramChatbot(object):
   
   
   def run(self):
-    app = Application.builder().token(self.__token).build()
+    
+    self.__app = Application.builder().token(self.__token).build()
 
     # Commands
     # app.add_handler(CommandHandler('start', start_command))
@@ -144,17 +148,17 @@ class TelegramChatbot(object):
     # app.add_handler(CommandHandler('custom', custom_command))
 
     # Messages
-    app.add_handler(MessageHandler(filters.TEXT, self.handle_message))
+    self.__app.add_handler(MessageHandler(filters.TEXT, self.handle_message))
 
     # Log all errors
-    app.add_error_handler(self._on_error)
+    self.__app.add_error_handler(self._on_error)
 
-    self.P("Running '{}' using {}v{}...".format(
+    self.P("Running {} using {} v{}...".format(
       self.__bot_name, self.__class__.__name__, __VERSION__
       ),
       color='g', boxed=True
     )
     self.P('Polling...')
     # Run the bot
-    app.run_polling(poll_interval=3)
+    self.__app.run_polling(poll_interval=3)
     return  
