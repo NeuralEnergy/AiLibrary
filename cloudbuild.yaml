@@ -14,9 +14,6 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/ne-ailib']
     dir: 'workspace'
 
-steps:
-  # ... [previous steps for cloning, building, and pushing the image]
-
   # Step 4: Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
@@ -27,7 +24,13 @@ steps:
     - '--image'
     - 'gcr.io/$PROJECT_ID/ne-ailib'
     - '--region'
-    - 'us-central1-a'  # Replace with your desired region
+    - '$LOCATION'  # Replace with your desired region
+    - '--set-env-vars'
+    - >
+      NEAIL_TELEGRAM_TOKEN=$_NEAIL_TELEGRAM_TOKEN,
+      NEAIL_MOTION_TOKEN=$_NEAIL_MOTION_TOKEN,
+      NEAIL_GPT_KEY=$_NEAIL_GPT_KEY,
+      NEAIL_HF_TOKEN=$_NEAIL_HF_TOKEN  # Split environment variables
     - '--allow-unauthenticated'
     # Additional Cloud Run configurations can be added here
 
