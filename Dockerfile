@@ -7,9 +7,10 @@ COPY  . /aid_app
 
 ENV TZ Europe/Bucharest
 
-ENV AID_APP_DOCKER Yes
 ENV SHOW_PACKS Yes
 ENV FORCE_CPU No
+
+ENV AID_APP_DOCKER Yes
 ENV AID_APP_ID NeuralEnergyAiLibrary
 
 ENV PYTHONPATH .
