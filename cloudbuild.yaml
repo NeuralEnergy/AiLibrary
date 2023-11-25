@@ -20,11 +20,11 @@ steps:
     args:
     - 'run'
     - 'deploy'
-    - 'ne-ailib-service'  # Replace with your Cloud Run service name
+    - 'ne-ailib-service'  # Cloud Run service name
     - '--image'
     - 'gcr.io/$PROJECT_ID/ne-ailib'
     - '--region'
-    - '$LOCATION'  # Replace with your desired region
+    - '$LOCATION'  # desired region
     - '--set-env-vars'
     - >
       NEAIL_TELEGRAM_TOKEN=$_NEAIL_TELEGRAM_TOKEN,
@@ -32,6 +32,8 @@ steps:
       NEAIL_GPT_KEY=$_NEAIL_GPT_KEY,
       NEAIL_HF_TOKEN=$_NEAIL_HF_TOKEN  # Split environment variables
     - '--allow-unauthenticated'
+    - '--port'
+    - '5002'
     # Additional Cloud Run configurations can be added here
 
 images:
