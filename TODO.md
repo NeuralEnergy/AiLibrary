@@ -8,6 +8,7 @@
 - [x] Lansarea versiunii 8.5 a bibliotecii de baza integrate in “Mobile Neural Powerplant” (initial 7.0) si in final release-ul 9.0 (la finalizarea proiectului)
 - [ ] Sprijinirea activitatilor A3.1 pentru realizarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana prin utilizarea readerbench/ro-offense
 - [x] Realizarea unui mediu avansat de tip .devcontainer pentru replicabilitatea totala a mediului de dezvoltare
+- [ ] Tecerea de la Azure la GCP pentru rulare si testare in mediu specializat containerizarii cu conexiune securizata SSL
 
 
 # A.2.1
