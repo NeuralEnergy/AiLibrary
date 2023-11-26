@@ -4,16 +4,16 @@ cwd = os.getcwd()
 print("{} running from: {}".format(__file__, cwd), flush=True)
 sys.path.append(cwd)
 
-import socket
+import uuid
 
 from models.telegram.base_engine import TelegramChatbot
 from basic_inference_server import Logger
 
   
 if __name__ == '__main__':
-  hostname = socket.gethostname()
+  hostname = uuid.uuid4().hex[:6]
   l = Logger(
-    "MO@" + hostname, 
+    "MO-" + hostname, 
     base_folder='.', app_folder='_cache'
   )
   
