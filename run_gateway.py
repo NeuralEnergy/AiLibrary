@@ -19,6 +19,8 @@ import sys
 import os
 import platform
 
+import socket
+
 
 import argparse
 
@@ -71,9 +73,11 @@ if __name__ == '__main__':
   host = args.host
   port = args.port
 
+  hostname = socket.gethostname()
+
   ### Attention! config_file should contain the configuration for each endpoint; 'NR_WORKERS' and upstream configuration
   log = Logger(
-    lib_name='APPv' + APP_VER,
+    lib_name='APPv' + APP_VER + '@' + hostname,
     config_file='config_gateway.txt',
     base_folder=base_folder, app_folder=app_folder,
     TF_KERAS=False
