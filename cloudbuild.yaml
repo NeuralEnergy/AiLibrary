@@ -40,8 +40,8 @@ steps:
     - '2'       # increase CPU limit from basic of 1
     - '--min-instances'
     - '1'    # set the minimum number of instances to 1 to make sure the service is always on
-    # - '--max-instances'
-    # - '1'    # set the maximum number of instances to 1 to accomodate singleton behaviour
+    - '--max-instances'
+    - '1'    # set the maximum number of instances to 1 to accomodate singleton behaviour
     
     # Additional Cloud Run configurations can be added here
 
