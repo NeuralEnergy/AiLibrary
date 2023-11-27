@@ -9,6 +9,8 @@
 - [x] Tecerea de la Azure la GCP pentru rulare si testare in mediu specializat containerizarii cu conexiune securizata SSL
 - [ ] Experimentarea cu backend-ul de calcul paralel tensorial MPS - exemplu simplu de calcul paralel cu Pytorch folosind backend MPS (Apple Metal Performance Shaders)
 - [ ] Sprijinirea activitatilor A3.1 pentru realizarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana prin utilizarea readerbench/ro-offense
+- [ ] Completarea documentatiei de utilizare a bibliotecii de baza si a serverului gateway cu includerea operationalizarii si a CI/CD in GCP inclusiv `cloudbuild.yaml`
+- [ ] Completarea documentatiei de utilizare a sistemului pentru utilizarea `.devcontainer` cu componetele sale aferente `Dockerfile` si `devcontainer.json`
 
 
 # A.2.1
@@ -27,6 +29,7 @@
 
 # A.2.2
 
+- [x] Dezvoltarea mediului suport de verificare si asigurare a replicabiltatii bazat pe devcontainer
 - [ ] Proiectarea testarii si pre-testare in laborator a unui prototip demonstrator pentru analiza limbajului ofensiv in limba romana.
 - [ ] Integrarea testelor externalizate
 - [ ] Compilarea rapoartelor de testare
