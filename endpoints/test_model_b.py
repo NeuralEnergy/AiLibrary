@@ -4,8 +4,8 @@ from basic_inference_server import FlaskWorker
 
 
 _CONFIG = {
-  'WEIGHT'    : 0,
-  'BIAS'      : 0,
+  'WEIGHT'    : 1,
+  'BIAS'      : 2,
 }
 
 class TestModelBWorker(FlaskWorker):
