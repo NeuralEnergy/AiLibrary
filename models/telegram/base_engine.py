@@ -45,6 +45,7 @@ class TelegramChatbot(object):
      
   def P(self, s, color=None, boxed=False):    
     self.__log.P(s, color=color, boxed=boxed)
+    return
     
     
   def __build(self):

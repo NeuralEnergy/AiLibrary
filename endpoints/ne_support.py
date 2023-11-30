@@ -151,7 +151,14 @@ if __name__ == '__main__':
     help='JSON configuration of the endpoint'
   )
   
+  parser.add_argument(
+    '--host_id', type=str,
+    help='The host id'
+  )
+  
   args = parser.parse_args()
+  host_id = args.host_id
+  
   str_config_data = args.config_endpoint
   print("Using --config_endpoint: {}".format(str_config_data))
   config_data = json.loads(str_config_data)
@@ -159,6 +166,7 @@ if __name__ == '__main__':
   
   log = Logger(
     lib_name="SPRC",
+    host_id=host_id,
     base_folder=".",
     app_folder="_cache",
     TF_KERAS=False, # use_tf
