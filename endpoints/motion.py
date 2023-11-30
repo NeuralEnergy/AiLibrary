@@ -15,6 +15,11 @@ if __name__ == '__main__':
   parser = argparse.ArgumentParser()
 
   parser.add_argument(
+    '--config_endpoint', type=str, default='{}',
+    help='JSON configuration of the endpoint'
+  )
+
+  parser.add_argument(
     '--host_id', type=str,
     help='The host id'
   )

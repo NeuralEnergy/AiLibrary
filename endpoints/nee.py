@@ -16,9 +16,13 @@ from models.telegram.base_engine import TelegramChatbot
 from basic_inference_server import Logger
 
   
-if __name__ == '__main__':
-  
+if __name__ == '__main__':  
   parser = argparse.ArgumentParser()
+
+  parser.add_argument(
+    '--config_endpoint', type=str, default='{}',
+    help='JSON configuration of the endpoint'
+  )
 
   parser.add_argument(
     '--host_id', type=str,
