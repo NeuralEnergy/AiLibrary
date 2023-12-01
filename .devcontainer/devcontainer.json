@@ -18,6 +18,7 @@
       },
 			"extensions": [
         // "streetsidesoftware.code-spell-checker",
+        "googlecloudtools.cloudcode",
         "ms-python.python",
         "GitHub.copilot",
         "github.vscode-github-actions",
