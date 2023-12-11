@@ -38,11 +38,13 @@ if __name__ == '__main__':
     base_folder='.', app_folder='_cache'
   )
   
-  eng = TelegramChatbot(
-    log=l, 
-    bot_name='@neural_energy_bot',
-    token_env_name='NEAIL_TELEGRAM_TOKEN', 
-    persona='nee-sarcastic',
-  )
-
-  eng.run()
+  if l.app_debug_mode:
+    l.P("App is running in debug mode - chatbot disabled", color='r', boxed=True)
+  else:      
+    eng = TelegramChatbot(
+      log=l, 
+      bot_name='@neural_energy_bot',
+      token_env_name='NEAIL_TELEGRAM_TOKEN', 
+      persona='nee-sarcastic',
+    )
+    eng.run()

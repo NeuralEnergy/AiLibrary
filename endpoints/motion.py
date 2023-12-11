@@ -33,11 +33,13 @@ if __name__ == '__main__':
     base_folder='.', app_folder='_cache'
   )
   
-  eng = TelegramChatbot(
-    log=l, 
-    bot_name='@Motionmask_bot',
-    token_env_name='NEAIL_MOTION_TOKEN', 
-    persona='motionmask-funny',
-  )
-
-  eng.run() 
+  if l.app_debug_mode:
+    l.P("App is running in debug mode - chatbot disabled", color='r', boxed=True)
+  else:
+    eng = TelegramChatbot(
+      log=l, 
+      bot_name='@Motionmask_bot',
+      token_env_name='NEAIL_MOTION_TOKEN', 
+      persona='motionmask-funny',
+    )
+    eng.run() 
