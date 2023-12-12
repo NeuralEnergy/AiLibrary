@@ -1,6 +1,3 @@
-# Continut
-
-
 # Introducere
 
 Prezentul studiu prezinta o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). Scopul studiului este atat intelegerea acestor probleme cat si identificarea oportunitatilor cu accent pe cele din zona implementarii, integrarii continue si mentinerii produselor bazate pe modele AI in medii avansate bazate pe procesore grafice (GPU).
@@ -135,7 +132,7 @@ Aspectele de CI/CD (Continuous Integration/Continuous Deployment) menționate î
 
 Analiza propunerii Neural Energy pentru `.devcontainer` și `Dockerfile` indică o abordare structurată și eficientă pentru crearea unui mediu de dezvoltare pentru software-ul lor. Voi analiza fiecare componentă în parte pentru a oferi o înțelegere mai clară a configurației și a intențiilor din spatele acesteia.
 
-#### devcontainer & Docker
+__**.devcontainer & Docker**__
 
 Fisierul `.devcontainer` este utilizat pentru a configura un mediu de dezvoltare în container pentru Visual Studio Code. Acesta definește setările și extensiile necesare pentru a oferi un mediu de dezvoltare consistent și eficient.
 
@@ -157,13 +154,11 @@ Dockerfile-ul furnizează instrucțiuni pentru construirea imaginii Docker a med
   - `NEAIL_VERSION` indică versiunea aplicației, esențială pentru urmărirea versiunilor și depistarea problemelor.
 - **EXPOSE**: Expune un interval de porturi, semnalând porturile care vor fi utilizate de aplicație.
 
-#### Concluzie
-
 Configurația `.devcontainer` și `Dockerfile` sugerează o concentrare puternică pe crearea unui mediu de dezvoltare robust și bine definit pentru proiecte de AI și machine learning. Utilizarea unui mediu de containerizare asigură consistența și reproductibilitatea, fiind esențiale în dezvoltarea software-ului modern, în special în domenii avansate cum ar fi AI. Adăugarea unui set bogat de extensii și unor configurări personalizate reflectă o abordare detaliată și bine gândită, menită să faciliteze procesul de dezvoltare și să îmbunătățească eficiența.
 
 ### Comercializarea Tehnologiilor
 
-Batura Neural Energy deschiza și focusul pe un server de inferență bazat pe microservicii sugerează potențial pentru comercializare în nișe care necesită implementări de AI flexibile și scalabile.
+Natura Neural Energy de platforma deschisa și focusul pe un server de inferență bazat pe microservicii sugerează potențial pentru comercializare în nișe care necesită implementări de AI flexibile și scalabile.
 
 ### Cercetare și Dezvoltare
 
