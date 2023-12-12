@@ -9,8 +9,8 @@
 - [x] Tecerea de la Azure la GCP pentru rulare si testare in mediu specializat containerizarii cu conexiune securizata SSL
 - [ ] Experimentarea cu backend-ul de calcul paralel tensorial MPS - exemplu simplu de calcul paralel cu Pytorch folosind backend MPS (Apple Metal Performance Shaders)
 - [ ] Sprijinirea activitatilor A3.1 pentru realizarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana prin utilizarea readerbench/ro-offense
-- [ ] Completarea documentatiei de utilizare a bibliotecii de baza si a serverului gateway cu includerea operationalizarii si a CI/CD in GCP inclusiv `cloudbuild.yaml`
-- [ ] Completarea documentatiei de utilizare a sistemului pentru utilizarea `.devcontainer` cu componetele sale aferente `Dockerfile` si `devcontainer.json`
+- [x] Completarea documentatiei de utilizare a bibliotecii de baza si a serverului gateway cu includerea operationalizarii si a CI/CD in GCP inclusiv `cloudbuild.yaml` si integrarea acesteia in analiza de piata impreuna cu furnizorul extern
+- [x] Completarea documentatiei de utilizare a sistemului pentru utilizarea `.devcontainer` cu componetele sale aferente `Dockerfile` si `devcontainer.json` si integrarea acesteia in analiza de piata impreuna cu furnizorul extern
 
 
 # A.2.1
@@ -33,9 +33,10 @@
 - [ ] Proiectarea testarii si pre-testare in laborator a unui prototip demonstrator pentru analiza limbajului ofensiv in limba romana.
 - [ ] Integrarea testelor externalizate
 - [ ] Compilarea rapoartelor de testare
+- [x] Convertirea raportului de analiza de piata in format markdown si integrarea in documentatia de proiect
 
 
 # A.3.1
 
 - [x] Rafinarea chatbot-ului Telegram cu capacitati neurale avansate si transformarea acestuia intr-un tipar replicabil 
-- [ ] Implementarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana. 
+- [ ] Implementarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana. bl
