@@ -32,19 +32,20 @@ class TestModelBWorker(FlaskWorker):
     ### abstract method implementation: parses the request inputs and keep the value for 'INPUT_VALUE'
     if 'INPUT_VALUE' not in inputs.keys():
       raise ValueError('INPUT_VALUE should be defined in inputs')
-
-    s = inputs['INPUT_VALUE']
+    weight = inputs.get('WEIGHT') or self.cfg_weight
+    bias = inputs.get('BIAS') or self.cfg_bias
+    s = float(inputs['INPUT_VALUE']), weight, bias
     return s
 
   def _predict(self, prep_inputs):
     ### see docstring in parent
     ### abstract method implementation: "in-memory model :)" that adds and subtracts.
+    val, weight, bias = prep_inputs
     self._create_notification(
       notif='log',
       msg='Predicting on usr_input: {} using {}'.format(prep_inputs, self.config_data)
     )
-    val = int(prep_inputs)
-    res = '{}*{} + {} = {} PREDICTED'.format(prep_inputs, self.cfg_weight, self.cfg_bias, val * self.cfg_weight + self.cfg_bias)
+    res = '{}*{} + {} = {} PREDICTED'.format(val, weight, bias, val * weight + bias)
     return res
 
   def _post_process(self, pred):

@@ -12,6 +12,9 @@ Unit tester for the Neural Energy AiLibrary GCP model endpoint.
 @example run:
 
 ```bash
+
+  # RUN 1
+  
   root@3d212eb79e72:/workspaces/501_NeuralEnergy/tests# python test2.py 
   test_burst_requests (__main__.TestGCPModelEndpoint)
   Test the GCP model endpoint with burst requests. ... 
@@ -40,6 +43,37 @@ Unit tester for the Neural Energy AiLibrary GCP model endpoint.
   Ran 1 test in 2.571s
 
   OK
+  
+  # RUN 2
+
+  root@3d212eb79e72:/workspaces/501_NeuralEnergy/tests# python test2.py 
+  test_burst_requests (__main__.TestGCPModelEndpoint)
+  Test the GCP model endpoint with burst requests. ... 
+  Unique Signatures Collected:
+  [
+      "h21b4.test_model_b.TestModelBWorker.0",
+      "h21b4.test_model_b.TestModelBWorker.1"
+  ]
+
+  Unique dummy predicts outputs collected:
+  [
+      "1360*1 + 2 = 1362 PREDICTED",
+      "8558*1 + 2 = 8560 PREDICTED",
+      "8198*1 + 2 = 8200 PREDICTED",
+      "341*1 + 2 = 343 PREDICTED",
+      "8060*1 + 2 = 8062 PREDICTED",
+      "4494*1 + 2 = 4496 PREDICTED",
+      "2765*1 + 2 = 2767 PREDICTED",
+      "5620*1 + 2 = 5622 PREDICTED",
+      "4537*1 + 2 = 4539 PREDICTED",
+      "7759*1 + 2 = 7761 PREDICTED"
+  ]
+  ok
+
+  ----------------------------------------------------------------------
+  Ran 1 test in 2.617s
+
+  OK  
 ```
 
 """
@@ -48,6 +82,8 @@ import requests
 import unittest
 import json
 import numpy as np
+
+from collections import defaultdict
 
 class TestGCPModelEndpoint(unittest.TestCase):
     """
@@ -69,8 +105,8 @@ class TestGCPModelEndpoint(unittest.TestCase):
     def setUp(self):
         """Set up test parameters."""
         self.url = "https://ne-ailib-service-zyqocudmla-uc.a.run.app/run"
-        self.unique_signatures = set()
-        self.unique_dummy_predicts = set()
+        self.unique_signatures = defaultdict(int)
+        self.unique_dummy_predicts = defaultdict(int)
 
     def test_burst_requests(self):
         """
@@ -82,7 +118,9 @@ class TestGCPModelEndpoint(unittest.TestCase):
             # Define the payload
             payload = {
               "SIGNATURE": "test_model_b",
-              "INPUT_VALUE": np.random.randint(0, 10_000)
+              "INPUT_VALUE": np.random.randint(0, 10_000),
+              "WEIGHT": np.random.randint(0, 1_000),
+              "BIAS": np.random.randint(0, 100),
             }
 
             # Send POST request
@@ -92,19 +130,19 @@ class TestGCPModelEndpoint(unittest.TestCase):
             # Parse response JSON and collect unique signatures
             response_json = response.json()
             if 'signature' in response_json:
-                self.unique_signatures.add(response_json['signature'])
+                self.unique_signatures[response_json['signature']] += 1
             if 'predict_result' in response_json:
-                self.unique_dummy_predicts.add(response_json['predict_result'].get('dummy_model_predict'))
+                self.unique_dummy_predicts[response_json['predict_result'].get('dummy_model_predict')] += 1
             
 
     def tearDown(self):
         """Display unique signatures after the test finishes."""
         print("\nUnique Signatures Collected:\n{}".format(
-          json.dumps(list(self.unique_signatures), indent=4)
+          json.dumps(self.unique_signatures, indent=4)
           )
         )
         print("\nUnique dummy predicts outputs collected:\n{}".format(
-          json.dumps(list(self.unique_dummy_predicts), indent=4)
+          json.dumps(self.unique_dummy_predicts, indent=4)
           )
         )
 
