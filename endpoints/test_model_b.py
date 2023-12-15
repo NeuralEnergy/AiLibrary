@@ -53,5 +53,4 @@ class TestModelBWorker(FlaskWorker):
     return {
       'dummy_model_predict' : pred, 
       'description' : 'Neural Energy inference test endpoint #2',
-
     }
