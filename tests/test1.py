@@ -7,6 +7,18 @@ Unit tester for the Neural Energy AiLibrary GCP model endpoint.
 @description: 
   This test sends a POST request to the GCP model endpoint and verifies the response.
 
+@example run:
+
+```bash
+root@3d212eb79e72:/workspaces/501_NeuralEnergy/tests# python test1.py 
+test_model_endpoint (__main__.TestGCPModelEndpoint)
+Test the GCP model endpoint. ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.250s
+
+OK
+```
 
 """
 

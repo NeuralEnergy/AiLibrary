@@ -8,6 +8,39 @@ Unit tester for the Neural Energy AiLibrary GCP model endpoint.
   This test sends multiple POST requests to the GCP model endpoint and 
   collects unique signatures. The collected signatures are displayed at the 
   end of the test.
+  
+@example run:
+
+```bash
+  root@3d212eb79e72:/workspaces/501_NeuralEnergy/tests# python test2.py 
+  test_burst_requests (__main__.TestGCPModelEndpoint)
+  Test the GCP model endpoint with burst requests. ... 
+  Unique Signatures Collected:
+  [
+      "test_model_b:TestModelBWorker:0",
+      "test_model_b:TestModelBWorker:1"
+  ]
+
+  Unique dummy predicts outputs collected:
+  [
+      "5495*1 + 2 = 5497 PREDICTED",
+      "4500*1 + 2 = 4502 PREDICTED",
+      "6501*1 + 2 = 6503 PREDICTED",
+      "3968*1 + 2 = 3970 PREDICTED",
+      "4299*1 + 2 = 4301 PREDICTED",
+      "7111*1 + 2 = 7113 PREDICTED",
+      "9851*1 + 2 = 9853 PREDICTED",
+      "6770*1 + 2 = 6772 PREDICTED",
+      "6844*1 + 2 = 6846 PREDICTED",
+      "2588*1 + 2 = 2590 PREDICTED"
+  ]
+  ok
+
+  ----------------------------------------------------------------------
+  Ran 1 test in 2.571s
+
+  OK
+```
 
 """
 
@@ -66,8 +99,14 @@ class TestGCPModelEndpoint(unittest.TestCase):
 
     def tearDown(self):
         """Display unique signatures after the test finishes."""
-        print("Unique Signatures Collected:", self.unique_signatures)
-        print("Unique Signatures Collected:", self.unique_dummy_predicts)
+        print("\nUnique Signatures Collected:\n{}".format(
+          json.dumps(list(self.unique_signatures), indent=4)
+          )
+        )
+        print("\nUnique dummy predicts outputs collected:\n{}".format(
+          json.dumps(list(self.unique_dummy_predicts), indent=4)
+          )
+        )
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
