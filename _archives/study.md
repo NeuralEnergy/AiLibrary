@@ -3,7 +3,11 @@
 Prezentul studiu prezinta o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). 
 Scopul studiului este atat intelegerea acestor probleme cat si identificarea oportunitatilor cu accent pe cele din zona implementarii, integrarii continue si mentinerii produselor bazate pe modele AI in medii avansate bazate pe procesore grafice (GPU).
 
-<center><img src="logo.png" alt="drawing" width="500"/></center>
+<center>
+<br>
+<img src="logo.png" alt="drawing" width="500"/>
+<br>Imagine simbolica obtinuta cu model neural generativ<br><br>
+</center>
 
 Dezvoltatorii de aplicații software bazate pe AI, și în special pe Deep Learning, se confruntă cu o serie de provocări semnificative, care pot include:
 
@@ -124,6 +128,20 @@ ologic sunt esențiale pentru a construi încredere și pentru a promova utiliza
 Proiectul "Neural Energy", re-prezentat inclusiv pe GitHub, cu subbiblioteca sa "basic_inference_server", se încadrează în mai multe dintre oportunitățile discutate anterior în ceea ce privește eficiența energetică, automatizarea, scalarea și integrarea în domeniul AI și Deep Learning.
 
 ## Descrierea principalelor elemente ale proiectului
+
+Biblioteca adoptă o arhitectură bazată pe microservicii, orchestrată sub un gateway distribuit. Acest paradigmă de design nu doar facilitează procesarea multi-worker, ci și generează un mediu robust pentru găzduirea diverselor microservicii. Fiecare microserviciu este identificat distinct printr-o proprietate cunoscută sub numele de „SEMNEAZĂ”, care acționează ca un element central în rutarea cererilor către serviciul respectiv. Depozitul principal este echipat cu un mecanism de autobuild declanșat de o operație de push, urmată de o simplă comandă pentru a reporni și actualiza containerul Docker pe server, asigurând astfel că cea mai recentă versiune a serviciului este întotdeauna implementată.
+
+Biblioteca Basic Inference Server facilitează orchestrarea containerelor docker printr-un script simplist care rulează pe server, asigurând continuu că containerul Docker este activ și funcțional. Persistența datelor între sesiuni este asigurată prin gestionarea volumului, menținând datele intacte și disponibile pe parcursul diferitelor sesiuni.
+
+Dezvoltatorii vor găsi avantajoasă prevederea pentru instrucțiuni locale și la distanță de construire și rulare a dockerului, permițând un mediu de dezvoltare și testare flexibil. Biblioteca este proiectată cu o atenție meticuloasă pentru detalii; de exemplu, pregătirea mediului este articulată bine pentru acomodarea incorporărilor neuronale de cuvinte în stratul de mediu.
+
+La baza sa, motorul funcționează ca un gateway de microservicii, fiecare server rulând lucrători paraleli pentru a gestiona cererile primite. O caracteristică unică este capacitatea de a interoga lista serverelor active, care oferă o perspectivă asupra microserviciilor disponibile în prezent. Mai mult, biblioteca oferă o abordare sistematică pentru a reporni sau actualiza toate serverele din containerul automatizat, asigurând astfel robustețea sistemului.
+
+Utilitatea bibliotecii nu se oprește doar la găzduirea microserviciilor; se extinde la interogarea unui microserviciu cu o API bine definită. API-ul este proiectat meticulos pentru a găzdui o varietate de puncte finale, fiecare cu un set unic de cerințe. Acest lucru se manifestă în modul în care câmpul SEMNEAZĂ este folosit pentru a identifica microserviciul, în timp ce alte câmpuri sunt personalizate pentru nevoile specifice ale punctului final.
+
+Mai mult, biblioteca oferă o expunere detaliată despre cum să configurezi Docker pe un VM Azure, lărgind astfel orizontul pentru implementare în medii cloud. Acest lucru, împreună cu definițiile API-ului bine articulate pentru diverse caracteristici utilitare, cum ar fi starea de sănătate a sistemului, oferă un pachet complet pentru gestionarea și interogarea microserviciilor implementate.
+
+Biblioteca strălucește și în prevederea sa pentru informații API programatice, demonstrând o cale clară pentru configurarea serverelor dummy și ilustrând configurația necesară pentru configurarea diverselor puncte finale. Fragmentele de cod furnizate elucidează arhitectura lucrătorilor, modelelor și punctelor finale, oferind o hartă clară pentru dezvoltatori pentru a integra modelele lor și a le implementa.
 
 ### Eficientizarea Consumului de Energie
 
