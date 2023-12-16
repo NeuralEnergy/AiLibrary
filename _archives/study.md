@@ -1,6 +1,9 @@
 # Introducere
 
-Prezentul studiu prezinta o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). Scopul studiului este atat intelegerea acestor probleme cat si identificarea oportunitatilor cu accent pe cele din zona implementarii, integrarii continue si mentinerii produselor bazate pe modele AI in medii avansate bazate pe procesore grafice (GPU).
+Prezentul studiu prezinta o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). 
+Scopul studiului este atat intelegerea acestor probleme cat si identificarea oportunitatilor cu accent pe cele din zona implementarii, integrarii continue si mentinerii produselor bazate pe modele AI in medii avansate bazate pe procesore grafice (GPU).
+
+<center><img src="logo.png" alt="drawing" width="500"/></center>
 
 Dezvoltatorii de aplicații software bazate pe AI, și în special pe Deep Learning, se confruntă cu o serie de provocări semnificative, care pot include:
 

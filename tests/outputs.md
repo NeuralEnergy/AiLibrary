@@ -1,4 +1,18 @@
 
+# Consideratii 
+
+
+1. **Cereri în Serie**: În metoda `test_burst_requests`, se folosește o buclă pentru a trimite mai multe cereri către endpoint. Puteți ajusta numărul de iterații conform cerințelor dvs.
+
+2. **Colectarea Semnăturilor Unice**: Scriptul folosește un set (`self.unique_signatures`) pentru a stoca valorile unice ale câmpului "signature" din fiecare răspuns. Setul asigură că sunt păstrate doar valorile unice.
+
+3. **Afișarea Rezultatelor**: Metoda `tearDown` este suprascrisă pentru a afișa semnăturile unice după finalizarea tuturor testelor. Această metodă este apelată automat după fiecare metodă de test din clasă.
+
+4. **Solicitarea Endpoint-ului**: Trimiterea cererilor în serie poate pune o încărcătură semnificativă pe endpoint. Asigurați-vă că endpoint-ul dvs. poate gestiona acest lucru fără probleme, în special dacă testați într-un mediu de producție.
+
+5. **Mediul de Testare**: Preferați întotdeauna testarea într-un mediu de dezvoltare sau staging pentru a evita impactul asupra utilizatorilor reali sau a datelor.
+
+
 # Rezultate de test 1
 
 Aceasta rulare a fost generata cu script-ul de test `tests/test2.py` care a fost rulat in dev-container si a facut request-uri la endpoint-ul de test din Google Cloud Platform in regim de burst.
