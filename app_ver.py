@@ -1,1 +1,1 @@
-__VER__ = '2.5.7' # app version
+__VER__ = '2.5.8' # app version

@@ -185,7 +185,8 @@ class OpenAIApp(object):
     self._key = _data['api_key']
     if self._key is None:
       self._key = os.environ['NEAIL_GPT_KEY']
-    msg = "#  Starting {} with key: {}  #".format(self.__class__.__name__, self._key)
+    obfuscated_key = self._key[:5] + '...' + self._key[-5:]
+    msg = "#  Starting {} with key: {}  #".format(self.__class__.__name__, obfuscated_key)
     self.P('#' * len(msg), color='g')
     self.P('#' + ' ' * (len(msg) - 2) + '#', color='g')
     self.P(msg, color='g')
