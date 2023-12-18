@@ -1,6 +1,51 @@
+# Introducere
+
+Acest document de testare prezinta raportul final testarii pentru proiectul "Mobile Neural Powerplant" in cadrul activitatii specifice de testare. Documentul se bazeaza pe livrabilele electronice ale contractului de prestari servicii incheiat intre SC Neural Energy SRL si furnizorul extern DIGITIZE TECH SRL. 
+Raportul prezent se va concentra pe testarea tehnica si functionala a componentelor software, totodata pezentand succint rezultatele obtinute in urma testarii echipamentelor si a unitatii mobile in vederea atingerii urmatoarelor obiective contractuale:
+ - Testarea modulului de energie regenerabila
+ - Testarea parametrilor de functionarea a unitatii mobile
+ - Testarea bibliotecii NeuralEnergy AI Library
+ - Alte elemente de testare cerute de echipa interna de CD:
+   - Testarea serverului gateway in Google Cloud Platform prin intermediul unui endpoint de test si a unui script de testare
+   - Testarea serverului gateway in mediul local prin intermediul unui endpoint de test si a unui script de testare
 
 # Consideratii 
 
+Intreaga testare pleaca de la premiza ca toate componentele sistemului sunt functionale si au fost testate in prealabil la nivel de dezvoltare. Testarea se concentreaza pe testarea integrata a sistemului in ansamblu si pe testarea de integrare a componentelor sistemului. Ipoteza de testare se bazeaza pe respectarea arhitecturii de tip microservicii si pe respectarea principiilor de dezvoltare a sistemelor distribuite.
+
+Pentru elementele specifice testarii software au fost utilizate atat componente online din Google Cloud Platform.
+
+## Google Cloud Platform
+
+Testarea in Google Cloud Platform a fost realizata prin intermediul unui endpoint de test si a unui script de testare. Endpoint-ul de test a fost configurat in Google Cloud Platform si a fost configurat pentru a rula in regim de testare. Scriptul de testare a fost configurat pentru a rula in regim de testare si simulare a clusterului unitatii mobile in Google Cloud Platform. Pentru aceasta, echipa interna de CD a construit trigger-ul de build si Google Cloud Platform Cloud-Run-ul aferent acestuia in baza unui fisier de configurare `cloudbuild.yaml` care a fost inclus in repository-ul de cod sursa al proiectului.
+
+<center> 
+<br><img src="test-gcp-run.png"/>
+<br>
+<i>Mediul de rulare in regim de testare specific proiectului Neural Energy din Google Cloud Platform</i>
+<br><br>
+</center>
+
+Echipa de testare a lansat din mediu extern Google Cloud Platform scriptul de testare care a facut request-uri la endpoint-ul de test din Google Cloud Platform in regim de burst. Scriptul de testare a fost rulat in mediul de testare local bazat pe Visual Studio Code si devcontainer. Log-urile au fost culese din Google Cloud Platform si au fost analizate in vederea obtinerii rezultatelor de testare.
+
+<center> 
+<br><img src="test-gcp-logs.png"/>
+<br>
+<i>Culegerea, procesare si arhivarea logurilor produse de aplicatie in procesul de testare din mediul Google Cloud Platform</i>
+<br><br>
+</center>
+
+Pentru testele locale au fost create si rulate instante locale ale microserviciilor folosind mediul de testare local bazat pe Visual Studio Code si devcontainer. Scriptul de testare a fost rulat prin conectarea de aceasta data la gateway-ul local. Log-urile au fost culese din mediul de testare local bazat pe Visual Studio Code si devcontainer si au fost analizate in vederea documentarii rezultatelor de testare.
+
+<center> 
+<br><img src="test-devcontainer.png"/>
+<br>
+<i>Mediul de testare local bazat pe Visual Studio Code si devcontainer</i>
+<br><br>
+</center>
+
+
+# Abordare testari de unitate in Python
 
 1. **Cereri în Serie**: În metoda `test_burst_requests`, se folosește o buclă pentru a trimite mai multe cereri către endpoint. Puteți ajusta numărul de iterații conform cerințelor dvs.
 
@@ -151,225 +196,9 @@ accelerate                0.24.1
 aiohttp                   3.9.0
 aiosignal                 1.3.1
 annotated-types           0.6.0
-anyio                     3.7.1
-archspec                  0.2.2
-argon2-cffi               21.3.0
-argon2-cffi-bindings      21.2.0
-asttokens                 2.0.5
-astunparse                1.6.3
-async-lru                 2.0.4
-async-timeout             4.0.3
-attrs                     23.1.0
-babel                     2.11.0
-backcall                  0.2.0
-backoff                   1.11.1
-beautifulsoup4            4.12.2
-bitsandbytes              0.41.2.post2
-bleach                    4.1.0
-boltons                   23.0.0
-bottleneck                1.3.5
-brotli                    1.0.9
-certifi                   2023.11.17
-cffi                      1.15.1
-chardet                   4.0.0
-charset-normalizer        2.0.4
-chromadb                  0.3.25
-click                     8.1.7
-clickhouse-connect        0.6.21
-cloudpickle               2.2.1
-coloredlogs               15.0.1
-comm                      0.1.2
-conda                     23.9.0
-conda-build               3.27.0
-conda-content-trust       0.2.0
-conda-index               0.3.0
-conda-libmamba-solver     23.7.0
-conda-package-handling    2.2.0
-conda-package-streaming   0.9.0
-contourpy                 1.2.0
-cryptography              41.0.3
-cycler                    0.11.0
-cytoolz                   0.12.0
-dask                      2023.6.0
-dataclasses               0.8
-dataclasses-json          0.6.2
-datasets                  2.14.7
-debugpy                   1.6.7
-decorator                 5.1.1
-defusedxml                0.7.1
-dill                      0.3.7
-distro                    1.8.0
-dnspython                 2.4.2
-duckdb                    0.9.2
-exceptiongroup            1.0.4
-executing                 0.8.3
-expecttest                0.1.6
-fastapi                   0.103.2
-fastjsonschema            2.16.2
-filelock                  3.9.0
-flask                     2.2.2
-flatbuffers               23.5.26
-fonttools                 4.25.0
-frozenlist                1.4.0
-fsspec                    2023.10.0
-gensim                    4.3.0
-gmpy2                     2.1.2
-greenlet                  3.0.1
-h11                       0.14.0
-h5py                      3.9.0
-hnswlib                   0.7.0
-httpcore                  1.0.2
-httpx                     0.25.2
-huggingface-hub           0.16.4
-humanfriendly             10.0
-hypothesis                6.88.4
-idna                      3.4
-imagecodecs               2023.1.23
-imageio                   2.31.4
-importlib-metadata        6.8.0
-ipykernel                 6.25.0
-ipython                   8.15.0
-ipywidgets                8.0.4
-itsdangerous              2.0.1
-jedi                      0.18.1
-jinja2                    3.1.2
-joblib                    1.3.2
-json5                     0.9.6
-jsonpatch                 1.33
-jsonpointer               2.1
-jsonschema                4.19.2
-jsonschema-specifications 2023.7.1
-jupyter                   1.0.0
-jupyter-client            8.6.0
-jupyter-console           6.6.3
-jupyter-core              5.5.0
-jupyter-events            0.8.0
-jupyter-lsp               2.2.0
-jupyter-server            2.10.0
-jupyter-server-terminals  0.4.4
-jupyterlab                4.0.8
-jupyterlab-pygments       0.1.2
-jupyterlab-server         2.25.1
-jupyterlab-widgets        3.0.9
-kiwisolver                1.4.4
-langchain                 0.0.340
-langsmith                 0.0.66
-lark                      1.1.8
-lazy-loader               0.3
-libarchive-c              2.9
-libmambapy                1.5.1
-locket                    1.0.0
-lz4                       4.3.2
-markupsafe                2.1.1
-marshmallow               3.20.1
-matplotlib                3.8.0
-matplotlib-inline         0.1.6
-mistune                   2.0.4
-mkl-fft                   1.3.8
-mkl-random                1.2.4
-mkl-service               2.4.0
-monotonic                 1.5
-more-itertools            8.12.0
-mpmath                    1.3.0
-multidict                 6.0.4
-multiprocess              0.70.15
-munkres                   1.1.4
-mutagen                   1.47.0
-mypy-extensions           1.0.0
-nbclient                  0.8.0
-nbconvert                 7.10.0
-nbformat                  5.9.2
-nest-asyncio              1.5.6
-networkx                  3.1
-notebook                  7.0.6
-notebook-shim             0.2.3
-numexpr                   2.8.7
-numpy                     1.26.0
-onnxruntime               1.16.3
-openai                    1.3.5
-overrides                 7.4.0
-packaging                 23.1
-pandas                    2.1.1
-pandocfilters             1.5.0
-parso                     0.8.3
-partd                     1.4.1
-peft                      0.6.2
-pexpect                   4.8.0
-pickleshare               0.7.5
-pillow                    10.0.1
-pip                       23.3
-pkginfo                   1.9.6
-platformdirs              3.10.0
-pluggy                    1.0.0
-ply                       3.11
-posthog                   3.0.2
-prometheus-client         0.14.1
-prompt-toolkit            3.0.36
-protobuf                  3.20.3
-psutil                    5.9.0
-ptyprocess                0.7.0
-pure-eval                 0.2.2
-pyarrow                   11.0.0
-pyarrow-hotfix            0.6
-pycosat                   0.6.6
-pycparser                 2.21
-pycryptodomex             3.19.0
-pydantic                  2.5.2
-pydantic-core             2.14.5
-pydub                     0.25.1
-pygments                  2.15.1
-pymssql                   2.2.5
-pyopenssl                 23.2.0
-pyparsing                 3.0.9
-pypdf                     3.17.1
-pyqt5                     5.15.10
-pyqt5-sip                 12.13.0
-pysocks                   1.7.1
-python-dateutil           2.8.2
-python-dotenv             1.0.0
-python-etcd               0.4.5
-python-json-logger        2.0.7
-python-telegram-bot       20.6
-pytz                      2023.3.post1
-pywavelets                1.4.1
-pyyaml                    6.0.1
-pyzmq                     25.1.0
-qtconsole                 5.5.0
-qtpy                      2.4.1
-referencing               0.30.2
-regex                     2023.10.3
-requests                  2.31.0
-rfc3339-validator         0.1.4
-rfc3986-validator         0.1.1
-rpds-py                   0.10.6
-ruamel.yaml               0.17.21
-ruamel.yaml.clib          0.2.6
-sacremoses                0.0.53
-safetensors               0.3.3
-scikit-image              0.20.0
-scikit-learn              1.3.0
-scipy                     1.11.3
-seaborn                   0.12.2
-send2trash                1.8.2
-sentencepiece             0.1.99
-setuptools                68.0.0
-sip                       6.7.12
-six                       1.16.0
-smart-open                5.2.1
-sniffio                   1.3.0
-sortedcontainers          2.4.0
-soupsieve                 2.5
-sqlalchemy                2.0.23
-stack-data                0.2.0
-starlette                 0.27.0
-sympy                     1.11.1
-tenacity                  8.2.3
-terminado                 0.17.1
-threadpoolctl             2.2.0
-tifffile                  2023.4.12
-tiktoken                  0.5.1
-tinycss2                  1.2.1
-tokenizers                0.14.1
+
+. . .
+
 tomli                     2.0.1
 toolz                     0.12.0
 torch                     2.1.1
@@ -718,3 +547,13 @@ KeyboardInterrupt
 [hc528: APPv2.5.8][2023-12-17 14:20:46] [GW] Terminating gateway server v2.5.8/8.9.5 with pid 62725 with signal 9...
 Killed
 ```
+
+In figura-log de mai sus este prezentata o rulare a aplicatiei in modul debug. In aceasta situatie, aplicatia nu este functionala, deoarece nu exista un server de chatbot care sa raspunda la intrebari. In mod normal, serverul de chatbot este un server separat, care poate fi rulat in paralel cu serverul de inferenta. In acest caz, serverul de chatbot este dezactivat, iar aplicatia nu este functionala. Cazul acesta este folosit pentru a demonstra functionarea exclusiv a modulelor de tip web-API in modul debug.
+
+> Nota: Datorita lungimii mari a listei de pachete disponibile aceasta a fost redusa din figura/log de mai sus. Pentru a vedea lista completa de pachete disponibile, se poate rula comanda `pip list` in containerul de dezvoltare. Lista de pachete este afisata si serializata in log-uri pentru a putea fi verificata in cazul in care este nevoie si apar probleme de incompatibilitate intre versiuni.
+
+# Concluzii 
+
+In acest document am prezentat modul de functionare al aplicatiei NeuralEnergy, precum si modul de instalare si rulare. Aplicatia este functionala si poate fi folosita pentru a demonstra modul de functionare al unui sistem de inferenta bazat pe retele neuronale. Aplicatia este dezvoltata in Python, folosind framework-ul Flask pentru a crea servere de tip web-API. Aplicatia este dezvoltata in mod modular, astfel incat fiecare server de inferenta poate fi dezvoltat separat, iar aplicatia poate fi configurata pentru a rula unul sau mai multe servere de inferenta in paralel. In urma testarii efectuate a fost confirmata ipoteza ca aplicatia este functionala si poate fi folosita pentru a operationaliza un sistem de inferenta bazat pe retele neuronale precum si alte sisteme de tip web-API ce necesita orchestrare si scalare fara a fi necesare cunostinte avansate de programare sau eforturi de dezvoltare a infrastructurii (DevOps) suplimentare.
+
+Testarea aferenta componentelor unitatii mobile a confirmat potentialul de scalare si replicare a acesteia pentru utilizarea in aplicatii unde procesarea in-situ este necesara. In urma testarii a fost confirmata ipoteza ca unitatea mobila este functionala si poate fi folosita pentru a operationaliza modululele sofware ale Neural Energy AiLibrary.

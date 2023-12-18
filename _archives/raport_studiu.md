@@ -1,7 +1,9 @@
-# Introducere
+# Introducere si metodologie (1.1)
 
-Prezentul studiu prezinta o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). 
+Prezentul studiu prezinta o propunere a abordare a strategiei de go-to-market pentru Neural Energy plecand de la o analiza in detaliu a principalelor probleme si solutii cu care se confrunta companiile si producatorii din industria software ce fie sunt specializati in zona Inteligentei Artificiale sau sunt consumatori de functionalitati si API-uri bazate pe invatare automata adanca (sau Deep Learning). 
 Scopul studiului este atat intelegerea acestor probleme cat si identificarea oportunitatilor cu accent pe cele din zona implementarii, integrarii continue si mentinerii produselor bazate pe modele AI in medii avansate bazate pe procesore grafice (GPU).
+In acest sens, studiul se concentreaza pe o analiza a oportunitatilor de inovare in domeniul AI si Deep Learning, cu accent pe eficienta energetica, scalabilitate si integrare continua respectand cele 6 componente conform contractului respectiv: (1.1) Metodologie, (1.2) Recenzii ale studiilor existente, (1.3) Analiza pietei potentiale, (1.4) Analiza tendintelor, (1.5) Propuneri strategice pentru abordarea piete, (1.6) Analiza concurentei. I
+> Datorita modului in care a fost realizata cercetarea si abordarii iterative a subiectului, unele dintre aceste componente se suprapun si se regasesc in mai multe sectiuni ale studiului. Totodata acestea sunt prezentate in ordinea in care au fost abordate si nu in ordinea in care au fost enumerate in contractul de cercetare. Cu toate acestea au fost inserate referinte clare la punctele cerute in contractul de cercetare.
 
 <center>
 <br>
@@ -31,7 +33,7 @@ Dezvoltatorii de aplicații software bazate pe AI, și în special pe Deep Learn
 
 Aceste probleme sunt reflectate în cercetări, dezvoltări de produs și strategii de afaceri din industria AI și sunt subiecte constante de inovare și îmbunătățire.
 
-# O privire asupra stadiului actual al tehnologiei
+# O privire asupra stadiului actual al tehnologiei (1.2)
 
 Analizând din perspectiva resurselor necesare, scalabilității, implementării și integrării continue, principalele probleme cu care se confruntă dezvoltatorii de software bazat pe AI și Deep Learning sunt complexe și multifacete. Acestea variază de la nevoia de a gestiona resurse computaționale considerabile, la provocările privind adaptarea și integrarea tehnologiilor în sisteme existente, până la asigurarea unei scalabilități eficiente. În cele ce urmează, voi detalia aceste aspecte.
 
@@ -123,11 +125,11 @@ ologic sunt esențiale pentru a construi încredere și pentru a promova utiliza
 În concluzie, provocările legate de consumul de energie și gestionarea resurselor în AI oferă oportunități ample pentru inovare în cercetare, dezvoltare și comercializare. Prin abordarea acestor probleme, industria poate nu doar să îmbunătățească eficiența și scalabilitatea soluțiilor de AI, dar și să contribuie la un viitor mai sustenabil și responsabil din punct de vedere ecologic.
 
 
-# Studiu de caz: Neural Energy
+# Recenzia studiilor si abordarilor exitente (1.2)
 
-Proiectul "Neural Energy", re-prezentat inclusiv pe GitHub, cu subbiblioteca sa "basic_inference_server", se încadrează în mai multe dintre oportunitățile discutate anterior în ceea ce privește eficiența energetică, automatizarea, scalarea și integrarea în domeniul AI și Deep Learning.
+Proiectul "Neural Energy", reprezentat inclusiv pe GitHub, cu subbiblioteca sa "basic_inference_server", se încadrează în mai multe dintre oportunitățile discutate anterior în ceea ce privește eficiența energetică, automatizarea, scalarea și integrarea în domeniul AI și Deep Learning.
 
-## Descrierea principalelor elemente ale proiectului
+## Solutii existente vs Neural Energy
 
 Biblioteca adoptă o arhitectură bazată pe microservicii, orchestrată sub un gateway distribuit. Acest paradigmă de design nu doar facilitează procesarea multi-worker, ci și generează un mediu robust pentru găzduirea diverselor microservicii. Fiecare microserviciu este identificat distinct printr-o proprietate cunoscută sub numele de „SEMNEAZĂ”, care acționează ca un element central în rutarea cererilor către serviciul respectiv. Depozitul principal este echipat cu un mecanism de autobuild declanșat de o operație de push, urmată de o simplă comandă pentru a reporni și actualiza containerul Docker pe server, asigurând astfel că cea mai recentă versiune a serviciului este întotdeauna implementată.
 
@@ -236,7 +238,7 @@ Analiza fișierului `cloudbuild.yaml` specific pentru Google Cloud Platform (GCP
 
 Configurația `cloudbuild.yaml` reflectă o abordare strategică și bine structurată pentru automatizarea și optimizarea procesului de CI/CD în cadrul GCP. Utilizarea serviciilor cloud native, cum ar fi Cloud Build, Container Registry și Cloud Run, oferă avantaje semnificative în termeni de eficiență, scalabilitate și securitate. Aceasta permite echipei de dezvoltare să se concentreze mai mult pe inovare și dezvoltare, în timp ce infrastructura și procesele de desfășurare sunt gestionate în mod eficient și automatizat.
 
-## Analiza potențialilor clienti
+## Analiza potențialilor clienti (1.3)
 
 In cele ce urmeaza vom analiza potentialii clienti ai proiectului "Neural Energy", subbiblioteca sa "basic_inference_server" impreuna cu intreaga infrastructura fizica a unitatii mobile, in functie de dimensiunea si tipul organizației, necesitățile specifice legate de AI și contextul de utilizare.
 
@@ -295,9 +297,9 @@ Instituțiile de sănătate pot beneficia de AI pentru a îmbunătăți diagnost
 
 2. **Auto și Transporturi**: În industria auto, unde AI este utilizat pentru dezvoltarea vehiculelor autonome și optimizarea logisticii, "Neural Energy" ar putea oferi infrastructura necesară pentru procesarea și analiza datelor.
 
-# Competitie
+# Competitie 
 
-## Analiza generala a competitiei
+## Analiza generala a competitiei si a tendintelor (1.4)
 
 Analizând piața actuală a serverelor de inferență AI, putem identifica o serie de soluții existente care ar putea fi considerate competitori pentru produsul Neural Energy. Acești competitori variază de la soluții complexe la cele mai simple și provin de la o varietate de producători și companii.
 
@@ -323,7 +325,7 @@ La o analiza generala a pietei actuale a serverelor de inferenta AI, putem ident
 
 9. **Giga Byte**, **H3C** și **Super Micro Computer**: Aceste companii oferă, de asemenea, servere de inferență AI și sunt recunoscute pentru soluțiile lor personalizabile și eficiente.
 
-### Concurența pe Piață serverelor
+### Concurența pe Piață serverelor (1.6)
 
 Pe piața serverelor de inferență AI, concurența este intensă, iar companiile se concentrează pe inovare și eficiență pentru a se diferenția. Soluțiile variază în ceea ce privește capacitatea de procesare, eficiența energetică, scalabilitatea și integrarea cu alte tehnologii. Companiile mari, cum ar fi NVIDIA și Intel, au o prezență puternică pe piață datorită reputației lor în domeniul tehnologic și a investițiilor semnificative în cercetare și dezvoltare.
 
@@ -331,14 +333,21 @@ Pe piața serverelor de inferență AI, concurența este intensă, iar companiil
 
 Pentru Neural Energy, această piață competitivă reprezintă atât o provocare, cât și o oportunitate. Provocarea constă în a se diferenția de soluțiile existente, care sunt oferite de companii cu resurse considerabile și un istoric puternic în domeniu. Oportunitatea vine din posibilitatea de a inova și de a oferi soluții care răspund nevoilor specifice ale clienților sau care aduc îmbunătățiri în domenii precum eficiența energetică, costul sau flexibilitatea. In acest context, Neural Energy se adreseaza unei nise de piata care nu este acoperita de aceste solutii. Mai mult de atat, solutia de unitate-mobila-independenta propusa de Neural Energy impreuna cu infrastructura software de tip microservicii este o solutie complementara acestor solutii de tip bare-hardware sau hardware-as-a-service.
 
-## Solutii software
+## Analiza concurentei (1.6)
 
 In continuare vom prezenta principalii competitori ai solutiei software propuse de Neural Energy.
 
-### Kubernetes - standardul de facto pentru orchestarea containerelor
+### standardul de facto pentru orchestarea containerelor
 
 Kubernetes este o platformă open-source pentru orchestrarea containerelor. Acesta automatizează procesele de implementare, scalare și gestionare a aplicațiilor în containere. Kubernetes a fost dezvoltat de Google și este acum gestionat de Cloud Native Computing Foundation. Kubernetes este o soluție populară pentru gestionarea aplicațiilor containerizate, fiind utilizată de companii precum Google, Microsoft, IBM, Cisco, Huawei și multe altele.
 Kubernetes, în contextul dezvoltării și implementării AI, se prezintă ca o platformă extrem de eficientă pentru orchestrarea și managementul containerelor în medii de calcul distribuite. Deși Kubernetes a fost inițial dezvoltat de Google ca un proiect open-source pentru gestionarea aplicațiilor interne, în prezent, este considerat standardul de facto pentru desfășurarea, scalarea și managementul aplicațiilor containerizate în diverse medii. Mai mult decât atât, Kubernetes a devenit extrem de util pentru un nou set de cazuri de utilizare: dezvoltarea, antrenarea și implementarea modelelor de limbaj mare (LLMs) într-un mod eficient și eficace.
+
+<figure>
+  <img
+  src="k8s.png"
+  alt="The Kubernetes ecosystem">
+  <center><i>Figura "Ecosystemul Kubernetes": arhitectura de principiu a clusterului de orchestrare de aplicatii containerizate Kubernetes (sursa: medium.com)<i/> </center>
+</figure>
 
 Utilizarea Kubernetes în proiectele AI oferă mai multe avantaje în diferitele etape ale ciclului de viață al LLM-urilor, de la pre-antrenare la desfășurare, până la experimentare și construirea aplicațiilor. De exemplu, în faza de pre-antrenare a modelului, Kubernetes oferă o bază robustă oferind scalabilitate și elasticitate remarcabile. Capacitatea sa de a scala automat în sus și în jos pe baza cererii de resurse este unul dintre cele mai mari avantaje, în special pentru sarcinile de lucru AI/ML care necesită o putere de calcul imensă. Kubernetes permite, de asemenea, scalarea dinamică prin adăugarea sau reducerea ușoară a modulelor și nodurilor după cum este necesar, satisfăcând cerințele variabile de sarcină de lucru. Abordarea sa infrastructurală declarativă simplifică procesul de management, fiind o caracteristică de dezvoltare puternică care nu este disponibilă când se folosesc alte unelte precum Slurm.
 
@@ -379,7 +388,9 @@ Identificarea competitorilor specifici care oferă soluții on-edge pentru proce
 
 Acești competitori oferă o gamă largă de soluții care pot fi aplicate în diverse scenarii de utilizare, de la industria ospitalității la supravegherea video inteligentă, până la sisteme complexe IoT. Fiecare soluție are caracteristici unice și se adaptează la nevoile specifice ale proiectelor AI on-edge.
 
-# Nivele potentiale de pret
+# Propuneri strategice pentru abordarea pietei (1.5)
+
+## Nivele potentiale de pret
 
 In continuare vom prezenta nivelele de pret pentru solutia propusa de Neural Energy. In acest context cel mai important de mentionat este ca principalii competitori mentionati anteriori - atat cei partiali cat si cei integrali - practica nivele de pret cu mult mai mare decat propunerile din acest studiu. Totodata, solutia propusa de Neural Energy este o solutie de care nu are 100% acoperire de catre competitori. In acest context, pretul propus de Neural Energy este unul competitiv si sustenabil.
 
