@@ -139,7 +139,7 @@ Dezvoltatorii vor găsi avantajoasă prevederea pentru instrucțiuni locale și 
 
 La baza sa, motorul funcționează ca un gateway de microservicii, fiecare server rulând lucrători paraleli pentru a gestiona cererile primite. O caracteristică unică este capacitatea de a interoga lista serverelor active, care oferă o perspectivă asupra microserviciilor disponibile în prezent. Mai mult, biblioteca oferă o abordare sistematică pentru a reporni sau actualiza toate serverele din containerul automatizat, asigurând astfel robustețea sistemului.
 
-Utilitatea bibliotecii nu se oprește doar la găzduirea microserviciilor; se extinde la interogarea unui microserviciu cu o API bine definită. API-ul este proiectat meticulos pentru a găzdui o varietate de puncte finale, fiecare cu un set unic de cerințe. Acest lucru se manifestă în modul în care câmpul SEMNEAZĂ este folosit pentru a identifica microserviciul, în timp ce alte câmpuri sunt personalizate pentru nevoile specifice ale punctului final.
+Utilitatea bibliotecii nu se oprește doar la găzduirea microserviciilor; se extinde la interogarea unui microserviciu cu o API bine definită. API-ul este proiectat meticulos pentru a găzdui o varietate de puncte finale, fiecare cu un set unic de cerințe. Acest lucru se manifestă în modul în care câmpul `SIGNATURE` este folosit pentru a identifica microserviciul, în timp ce alte câmpuri sunt personalizate pentru nevoile specifice ale punctului final.
 
 Mai mult, biblioteca oferă o expunere detaliată despre cum să configurezi Docker pe un VM Azure, lărgind astfel orizontul pentru implementare în medii cloud. Acest lucru, împreună cu definițiile API-ului bine articulate pentru diverse caracteristici utilitare, cum ar fi starea de sănătate a sistemului, oferă un pachet complet pentru gestionarea și interogarea microserviciilor implementate.
 
@@ -302,6 +302,17 @@ Instituțiile de sănătate pot beneficia de AI pentru a îmbunătăți diagnost
 ## Analiza generala a competitiei si a tendintelor (1.4)
 
 Analizând piața actuală a serverelor de inferență AI, putem identifica o serie de soluții existente care ar putea fi considerate competitori pentru produsul Neural Energy. Acești competitori variază de la soluții complexe la cele mai simple și provin de la o varietate de producători și companii.
+
+Din perspectiva orchestrarii de aplicatii complexe pe langa liderul incontestat Kubernetes (fara a analiza o anumita implementare ca Openshift sau un anumit vendor cum ar fi AWS) putem identifica variate solutii care abordeaza anumite aspecte in peisajul arhitecturilor bazate pe microservicii.
+
+<center>
+<br><br>
+<img src="orch.png">
+<br><i>
+Situatia cotei de piata pe diverse tehnologii de orchestrare a microserviciilor. Sursa: "The New Stack". Se observa pozitia de lider a Kubernetes urmata atat de componente complementare precum Istio, cat si de solutii paralele de tip bare-metal precum Docker Swarm.
+<br></i>
+<br>
+</center>
 
 ### Producătorii Majori și Soluțiile lor
 
