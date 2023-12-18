@@ -309,7 +309,18 @@ Din perspectiva orchestrarii de aplicatii complexe pe langa liderul incontestat 
 <br><br>
 <img src="orch.png">
 <br><i>
-Situatia cotei de piata pe diverse tehnologii de orchestrare a microserviciilor. Sursa: "The New Stack". Se observa pozitia de lider a Kubernetes urmata atat de componente complementare precum Istio, cat si de solutii paralele de tip bare-metal precum Docker Swarm.
+Situatia cotei de piata pe diverse tehnologii de orchestrare a microserviciilor. Sursa: "The New Stack". Se observa pozitia de lider a Kubernetes urmata atat de componente complementare precum Istio, cat si de solutii paralele de tip bare-metal precum Docker Swarm. Deasemenea, in studiul realizat de "The New Stack" in martie 2016 se observa o potentiala ambiguitate prin introducerea Google Container Engine (Google Kubernetes Engine) ca si solutie complementare/paralela cu Kubernetes.
+<br></i>
+<br>
+</center>
+
+Din perspectiva tendintelor, atat pentru mediile de Cloud public cat si cele private sau cele hibride tendinta este de a migra in mod natural catre medii in care se pot utiliza tehnologii de tip containerizare. Aceasta tendinta este in concordanta cu tendintele actuale de dezvoltare a sistemelor de tip edge computing. In acest context, Neural Energy se aliniaza cu tendintele actuale de dezvoltare a sistemelor de tip edge computing. Mai jos o analiza a tendintelor actuale de dezvoltare prin utilizarea orchestrarii realizata de Data Bride Marketing Research.
+
+<center>
+<br><br>
+<img src="trend.jpg">
+<br><i>
+Evolutiei pietii globale de orchestrare de containere pe diverse tehnologii de orchestrare a microserviciilor containerizate. Sursa: "Data Bridge Market Research".
 <br></i>
 <br>
 </center>
@@ -350,7 +361,7 @@ In continuare vom prezenta principalii competitori ai solutiei software propuse 
 
 ### standardul de facto pentru orchestarea containerelor
 
-Kubernetes este o platformă open-source pentru orchestrarea containerelor. Acesta automatizează procesele de implementare, scalare și gestionare a aplicațiilor în containere. Kubernetes a fost dezvoltat de Google și este acum gestionat de Cloud Native Computing Foundation. Kubernetes este o soluție populară pentru gestionarea aplicațiilor containerizate, fiind utilizată de companii precum Google, Microsoft, IBM, Cisco, Huawei și multe altele.
+Kubernetes este o platformă open-source pentru orchestrarea containerelor care, din analiza realizata in cadrul prezentului raport, ocupe peste 70% din piata de orchestrare a containerelor la nivel mondial la momentul redactarii acestui raport-analiza de piata. Acesta suita de aplicatii automatizează procesele de implementare, scalare și gestionare a aplicațiilor în containere. Kubernetes a fost dezvoltat de Google și este acum gestionat de Cloud Native Computing Foundation. Kubernetes este o soluție populară pentru gestionarea aplicațiilor containerizate, fiind utilizată de companii precum Google, Microsoft, IBM, Cisco, Huawei și multe altele.
 Kubernetes, în contextul dezvoltării și implementării AI, se prezintă ca o platformă extrem de eficientă pentru orchestrarea și managementul containerelor în medii de calcul distribuite. Deși Kubernetes a fost inițial dezvoltat de Google ca un proiect open-source pentru gestionarea aplicațiilor interne, în prezent, este considerat standardul de facto pentru desfășurarea, scalarea și managementul aplicațiilor containerizate în diverse medii. Mai mult decât atât, Kubernetes a devenit extrem de util pentru un nou set de cazuri de utilizare: dezvoltarea, antrenarea și implementarea modelelor de limbaj mare (LLMs) într-un mod eficient și eficace.
 
 <figure>
