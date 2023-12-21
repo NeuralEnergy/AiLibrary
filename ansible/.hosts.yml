@@ -1,0 +1,15 @@
+all:
+  vars:
+    ansible_ssh_private_key_file: ""
+    ansible_user: ""
+    ansible_host: ""  
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"    
+  hosts:
+    ne1: 
+      ansible_ssh_port: ""
+    ne2: 
+      ansible_ssh_port: ""
+    ne3: 
+      ansible_ssh_port: ""
+    ne4: 
+      ansible_ssh_port: ""
