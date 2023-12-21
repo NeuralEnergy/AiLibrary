@@ -1,0 +1,89 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install required packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+
+- name: Add Docker repository GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /usr/share/keyrings/docker-archive-keyring.gpg
+    mode: 'u=rw,g=r,o=r'
+
+- name: Add Docker repository
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/docker.list
+    line: "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    create: yes
+
+- name: Update apt cache after adding Docker repository
+  apt:
+    update_cache: yes
+
+- name: Install Docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: Enable and start Docker service
+  ansible.builtin.systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Add NVIDIA Docker GPG key
+  ansible.builtin.shell:
+    cmd: curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+
+- name: Add NVIDIA Docker repository
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/nvidia-docker.list
+    line: "deb https://nvidia.github.io/nvidia-docker/ubuntu20.04/nvidia-docker.list /"
+    create: yes
+
+- name: Update apt cache after adding NVIDIA Docker repository
+  apt:
+    update_cache: yes
+
+- name: Install NVIDIA Container Toolkit
+  apt:
+    name: nvidia-container-toolkit
+    state: present
+
+- name: Restart Docker service to apply NVIDIA changes
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+
+- name: Run a temporary Docker container with NVIDIA GPU support
+  community.docker.docker_container:
+    name: nvidia-smi-test
+    image: nvidia/cuda:latest
+    command: nvidia-smi
+    devices:
+      - /dev/nvidiactl
+      - /dev/nvidia-uvm
+      - /dev/nvidia-uvm-tools
+      - /dev/nvidia-modeset
+    volumes:
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
+    state: started
+    detach: false
+    cleanup: yes
+  register: nvidia_smi_output
+
+- name: Display nvidia-smi output
+  debug:
+    msg: "{{ nvidia_smi_output }}"

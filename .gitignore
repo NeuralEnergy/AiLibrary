@@ -1,3 +1,5 @@
+*.pem
+
 __pycache__/
 
 .spyproject/
@@ -15,3 +17,6 @@ _local_cache/
 _cache/
 
 .env
+
+
+hosts.yml

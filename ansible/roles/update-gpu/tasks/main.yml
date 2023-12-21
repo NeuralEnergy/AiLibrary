@@ -1,0 +1,36 @@
+---
+- name: Update package lists
+  apt:
+    update_cache: yes
+
+- name: Install NTP
+  apt:
+    name: ntp
+    state: present
+
+- name: List GPGPU drivers
+  command: ubuntu-drivers list --gpgpu
+
+- name: Install NVIDIA driver
+  apt:
+    name:
+      - nvidia-driver-525
+      - nvidia-dkms-525
+    state: present
+
+- name: Reboot the system
+  reboot:
+
+- name: Wait for system to come back online after reboot
+  wait_for_connection:
+    delay: 30
+    timeout: 300
+
+- name: Check NVIDIA-SMI
+  command: nvidia-smi
+  register: nvidia_smi_output
+  failed_when: nvidia_smi_output.rc != 0
+
+- name: Output NVIDIA-SMI result
+  debug:
+    var: nvidia_smi_output.stdout
