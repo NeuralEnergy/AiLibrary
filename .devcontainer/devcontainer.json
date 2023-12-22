@@ -3,6 +3,7 @@
   "dockerFile": "Dockerfile",
   "runArgs": [
     "--env-file=.env",
+    "--gpus=all",
     "--name=neural-energy-devcontainer",
     "-p","5002-5010:5002-5010"
   ],

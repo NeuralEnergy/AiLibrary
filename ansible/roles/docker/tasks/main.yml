@@ -1,4 +1,9 @@
 ---
+
+# check if docker is installed and if not, install it
+# sudo find /etc/apt/sources.list.d/ -type f -name "*docker*" -exec rm {} \;
+
+
 - name: Update apt cache
   apt:
     update_cache: yes
@@ -6,24 +11,25 @@
 
 - name: Install required packages
   apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - software-properties-common
+    name: "{{item}}"
     state: present
+    update_cache: yes
+  loop:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg-agent
+  - software-properties-common
 
-- name: Add Docker repository GPG key
+- name: Docker | Install repo key
   ansible.builtin.get_url:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    dest: /usr/share/keyrings/docker-archive-keyring.gpg
-    mode: 'u=rw,g=r,o=r'
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    dest: /etc/apt/keyrings/docker.asc
 
-- name: Add Docker repository
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list.d/docker.list
-    line: "deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
-    create: yes
+- name: Docker | Add repo
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    state: present
 
 - name: Update apt cache after adding Docker repository
   apt:
@@ -43,15 +49,16 @@
     enabled: yes
     state: started
 
-- name: Add NVIDIA Docker GPG key
-  ansible.builtin.shell:
-    cmd: curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+- name: Add NVIDIA repo gpg key
+  apt_key:
+    url: "https://nvidia.github.io/nvidia-docker/gpgkey"
+    state: present
 
-- name: Add NVIDIA Docker repository
-  ansible.builtin.lineinfile:
-    path: /etc/apt/sources.list.d/nvidia-docker.list
-    line: "deb https://nvidia.github.io/nvidia-docker/ubuntu20.04/nvidia-docker.list /"
-    create: yes
+- name: Add NVIDIA apt repo
+  get_url:
+    url: "https://nvidia.github.io/nvidia-docker/ubuntu20.04/nvidia-docker.list"
+    dest: "/etc/apt/sources.list.d/nvidia-docker.list"
+    mode: 0644
 
 - name: Update apt cache after adding NVIDIA Docker repository
   apt:
