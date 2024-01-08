@@ -9,12 +9,14 @@
 - [x] Tecerea de la Azure la GCP pentru rulare si testare in mediu specializat containerizarii cu conexiune securizata SSL
 - [x] Completarea documentatiei de utilizare a bibliotecii de baza si a serverului gateway cu includerea operationalizarii si a CI/CD in GCP inclusiv `cloudbuild.yaml` si integrarea acesteia in analiza de piata impreuna cu furnizorul extern
 - [x] Completarea documentatiei de utilizare a sistemului pentru utilizarea `.devcontainer` cu componetele sale aferente `Dockerfile` si `devcontainer.json` si integrarea acesteia in analiza de piata impreuna cu furnizorul extern
+- [x] Endpoint demonstrativ pentru limbaj ofensiv proiectat
 
 # A.1.2 (Extern)
 
 - [x] Proiectare si dezvoltare experimentala sistem DevOps bazat pe Ansible pentru deployment-ul infrastructurii complete
 - [x] Executia si implementarea mediului final (complet) al infrastructurii de productie (in-situ la nivelul unitatii mobile)
 - [x] Revizia sistemului de monitorizare microservicii
+- [x] Endpoint demonstrativ pentru limbaj ofensiv dezvoltat in baza cerintelor
 
 
 # A.2.1
@@ -43,4 +45,4 @@
 # A.3.1
 
 - [x] Rafinarea chatbot-ului Telegram cu capacitati neurale avansate si transformarea acestuia intr-un tipar replicabil 
-- [ ] Implementarea unui nou demonstrator pentru analiza limbajului ofensiv in limba romana. 
+- [x] Preluarea si integrarea microserviciului de analiza a limbajului ofensiv in limba romana
