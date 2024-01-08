@@ -13,6 +13,8 @@ from time import time
 CACHE_DIR = './_models_cache'
 MODEL_NAME = "readerbench/ro-offense"
 
+MANDATORY_PACKAGES = ['transformers', 'tokenizers', 'fastapi','torch']
+
 # Function to get packages
 def get_packages(monitored_packages=None):
     packs = [x for x in pkg_resources.working_set]
@@ -39,6 +41,8 @@ class ModelHelper:
     self.__app_device = None
     self.__packs = None
     self.__timings = deque(maxlen=1000)
+    self.__packs_mandatory = None
+    self.__init()
     return
   
   def P(self, s, **kwargs):
@@ -49,6 +53,7 @@ class ModelHelper:
     self.P("Initializing model helper ...", flush=True)
     self.__packs = get_packages()
     self.P("Packages: \n{}".format("\n".join(self.__packs)), flush=True)
+    self.__packs_mandatory = [x for x in self.__packs if x.split()[0] in MANDATORY_PACKAGES]
     return
   
   
@@ -108,6 +113,7 @@ class ModelHelper:
       "metadata": {
         "model": "readerbench/ro-offense",
         "device" : str(predictions.device.type),
+        "packages" : self.__packs_mandatory,
       }
     }
 

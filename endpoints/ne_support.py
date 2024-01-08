@@ -6,6 +6,7 @@ Prezentare (RO):
   - fiecare microserviciu este un server de tip "model server" care va rula un model de invatare automata (profunda sau superficiala) cu logica si euristici 
   - modulele de tp "support" sunt module care nu au un server dedicat, dar care pot fi folosite pentru a monitoriza starea serverelor si a microserviciilor
   - fiecare modul de tip "support" va accesa un endpoint dedicat `/support_update_status` de tip "support" care este disponibil pe serverul de tip gateway
+  
 """
 
 import json
