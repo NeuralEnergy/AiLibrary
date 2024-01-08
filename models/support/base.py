@@ -1,3 +1,17 @@
+"""
+
+Neural Energy Power Plant project 
+
+@Author: Neuroplastic Software SRL
+@Copyright: Neural Energy SRL
+@description: Server monitoring module - base class
+@Date: 2022-12-04
+@Last Modified by: Neuroplastic Software SRL
+
+  
+  
+"""
+ 
 import requests
 from time import time, sleep
 

@@ -1,3 +1,13 @@
+#
+# Neural Energy Power Plant project 
+#
+# @Author: Neuroplastic Software SRL
+# @Copyright: Neural Energy SRL
+# @description: Dockerfile for the CPU version of the API
+# @Date: 2022-10-01
+# @Last Modified by:   Neuroplastic Software SRL
+# 
+
 FROM pytorch/pytorch
 
 RUN pip install --no-cache-dir transformers tokenizers fastapi uvicorn

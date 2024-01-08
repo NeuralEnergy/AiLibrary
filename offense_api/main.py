@@ -1,3 +1,14 @@
+#
+# Neural Energy Power Plant project 
+#
+# @Author: Neuroplastic Software SRL
+# @Copyright: Neural Energy SRL
+# @description: FastAPI wrapper for the ReaderBench Ro-Offense model
+# @Date: 2022-10-01
+# @Last Modified by:   Neuroplastic Software SRL
+# 
+
+
 import json
 import torch as th
 import numpy as np
