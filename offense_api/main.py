@@ -1,11 +1,14 @@
 import json
 import torch as th
+import numpy as np
+import pkg_resources
+
+from collections import deque
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from time import time
-import pkg_resources
 
 CACHE_DIR = './_models_cache'
 MODEL_NAME = "readerbench/ro-offense"
@@ -29,12 +32,13 @@ def get_packages(monitored_packages=None):
   
 class ModelHelper:
   def __init__(self, model_name=MODEL_NAME, cache_dir=CACHE_DIR):
-    self.model_name = model_name
-    self.cache_dir = cache_dir
-    self.tokenizer = None
-    self.model = None
-    self.app_device = None
+    self.__model_name = model_name
+    self.__cache_dir = cache_dir
+    self.__tokenizer = None
+    self.__model = None
+    self.__app_device = None
     self.__packs = None
+    self.__timings = deque(maxlen=1000)
     return
   
   def P(self, s, **kwargs):
@@ -50,13 +54,13 @@ class ModelHelper:
   
   def build(self):
     self.P("Building model helper ...")
-    self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, cache_dir=self.cache_dir)
-    self.model = AutoModelForSequenceClassification.from_pretrained(self.model_name, cache_dir=self.cache_dir)
+    self.__tokenizer = AutoTokenizer.from_pretrained(self.__model_name, cache_dir=self.__cache_dir)
+    self.__model = AutoModelForSequenceClassification.from_pretrained(self.__model_name, cache_dir=self.__cache_dir)
     if th.cuda.is_available():
-      self.app_device = th.device('cuda:0')
+      self.__app_device = th.device('cuda:0')
     else:
-      self.app_device = th.device('cpu')
-    self.model = self.model.to(self.app_device)
+      self.__app_device = th.device('cpu')
+    self.__model = self.__model.to(self.__app_device)
     
     if th.cuda.is_available():
       self.P("GPU: {}".format(th.cuda.get_device_name(0)), flush=True) 
@@ -64,12 +68,12 @@ class ModelHelper:
       self.P("GPU: Not available", flush=True)
     
     WARMUP_TEXT = "Esti destept!"
-    results = self.run_predict(text=WARMUP_TEXT)
+    results = self.run_predict(text=WARMUP_TEXT, timeit=False)
     self.P("Warmup on '{}': {}".format(WARMUP_TEXT, json.dumps(results, indent=4)), flush=True)    
     return
   
 
-  def run_predict(self, text):
+  def run_predict(self, text, timeit=True):
     """
     LABEL_0 = No offensive language
     LABEL_1 = Profanity (no directed insults)
@@ -79,10 +83,10 @@ class ModelHelper:
     """
     start_time = time()
     # Tokenize the input text  
-    inputs = self.tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
+    inputs = self.__tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
     
     for k, v in inputs.items():
-      inputs[k] = v.to(self.app_device)
+      inputs[k] = v.to(self.__app_device)
     
     CLASSES = [
       "No offensive language",
@@ -93,20 +97,26 @@ class ModelHelper:
 
       # Perform inference
     with th.no_grad():
-      outputs = self.model(**inputs)
+      outputs = self.__model(**inputs)
       predictions = th.nn.functional.softmax(outputs.logits, dim=-1)
       predicted_class_id = predictions.argmax().item()
 
-    elapsed_time = time() - start_time
+      
     # Return the prediction
     results = {
       "prediction": CLASSES[predicted_class_id],
       "metadata": {
         "model": "readerbench/ro-offense",
         "device" : str(predictions.device.type),
-        "elapsed_time": elapsed_time,
       }
     }
+
+    if timeit:
+      elapsed_time = time() - start_time
+      self.__timings.append(elapsed_time)
+      results['metadata']['elapsed_time'] = round(elapsed_time, 4)
+      results['metadata']['average_time'] = round(np.mean(self.__timings), 4)
+
     return results   
 
 
