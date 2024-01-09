@@ -20,6 +20,9 @@ from pydantic import BaseModel
 from fastapi.responses import JSONResponse
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from time import time
+from uuid import uuid4
+
+__VER__ = '0.1.1'
 
 CACHE_DIR = './_models_cache'
 MODEL_NAME = "readerbench/ro-offense"
@@ -65,6 +68,7 @@ class ModelHelper:
     self.__packs = get_packages()
     self.P("Packages: \n{}".format("\n".join(self.__packs)), flush=True)
     self.__packs_mandatory = [x for x in self.__packs if x.split()[0] in MANDATORY_PACKAGES]
+    self._local_id = str(uuid4())[:8]
     return
   
   
@@ -105,10 +109,10 @@ class ModelHelper:
       inputs[k] = v.to(self.__app_device)
     
     CLASSES = [
-      "No offensive language",
-      "Profanity (no directed insults)",
-      "Insults (directed offensive language, lower level of offensiveness)",
-      "Abuse (directed hate speech, racial slurs, sexist speech, threat with violence, death wishes, ..)"
+      "Limbaj non-ofensiv",
+      "Limbaj vulgar (fara insulte directe)",
+      "Insulte (limbaj ofensiv direct, nivel scazut de ofensivitate)",
+      "Abuz (limbaj ofensiv direct, nivel ridicat de ofensivitate)"
     ]
 
       # Perform inference
@@ -122,7 +126,9 @@ class ModelHelper:
     results = {
       "prediction": CLASSES[predicted_class_id],
       "metadata": {
-        "model": "readerbench/ro-offense",
+        "version": __VER__,
+        "worker" : self._local_id,
+        "model": MODEL_NAME,
         "device" : str(predictions.device.type),
         "packages" : self.__packs_mandatory,
       }

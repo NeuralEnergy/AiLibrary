@@ -43,7 +43,7 @@
 
         "ne_support" : {
           "HOST"          : "NO_HOST",
-          "PING_INTERVAL" : 600,
+          "PING_INTERVAL" : 60,
           "DESCRIPTION"   : "Neural Energy base cluster support process."
         }
 

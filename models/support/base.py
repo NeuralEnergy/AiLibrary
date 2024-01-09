@@ -11,8 +11,10 @@ Neural Energy Power Plant project
   
   
 """
- 
+import numpy as np
 import requests
+from collections import deque
+
 from time import time, sleep
 
 __SUPPORT_PROCESS_VERSION__ = '0.0.0'
@@ -23,6 +25,8 @@ class BaseServerMonitor:
     self.log = log
     self.__debug = debug
     self.__name = name
+    self.__timeseries = {}
+    self.__counts = {}
     if interval is None:
       interval = self.log.config_data.get('PING_INTERVAL', 1)
     self.__interval = interval
@@ -72,23 +76,44 @@ class BaseServerMonitor:
       self.P("Error while trying to deliver to {}: {}".format(url, e), color='r')
     return
       
+  def _register_metrics(self, metrics):
+    """
+    Register the metrics to be collected by the monitoring service.
+    """
+    dct_results = {}
+    for k, v in metrics.items():
+      if k not in self.__timeseries:
+        self.__timeseries[k] = deque(maxlen=10_000)
+      self.__timeseries[k].append(v)
+      self.__counts[k] = self.__counts.get(k, 0) + 1
+      if len(self.__timeseries[k]) > 1 and isinstance(v, (int, float)):
+        key1 = k + '_mean'
+        dct_results[key1] = round(np.mean(self.__timeseries[k]), 3)
+        key2 = k + '_count'
+        dct_results[key2] = "{}/{}".format(
+          self.__counts[k],
+          len(self.__timeseries[k]),
+        )
+        key3 = k + '_min'
+        dct_results[key3] = round(np.min(self.__timeseries[k]), 3)
+        key4 = k + '_max'
+        dct_results[key4] = round(np.max(self.__timeseries[k]), 3)
+    return dct_results
       
     
   def execute(self):    
     self.__run_cnt += 1
     metrics = self._collect_system_metrics()
-    msg = (
-      "{} v{} Total Mem: {:.1f}GB, Avail Mem: {:.1f}GB, "
-      "Sys Used Mem: {:.1f}GB, App Used Mem: {:.1f}GB, Total Disk: {:.1f}GB, Avail Disk: {:.1f}GB"
-    ).format(
-      self.__name, self.__version__,
-      metrics['total_memory'], metrics['available_memory'],
-      metrics['system_used_memory'], metrics['app_used_memory'],
-      metrics['total_disk'], metrics['available_disk']
-    )
+    metrics['statistics'] = self._register_metrics(metrics)
+    str_msg = "{} v{} ".format(self.__name, self.__version__)
+    
+    dct_msg = {
+      'msg' : str_msg,
+      **metrics,
+    }
   
     data = dict(
-      msg=msg,
+      data=dct_msg,
       **metrics,      
     )
     self._send_data(data)
