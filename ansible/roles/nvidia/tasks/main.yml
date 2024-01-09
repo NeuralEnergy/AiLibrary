@@ -1,0 +1,52 @@
+---
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Add NVIDIA repo gpg key
+  apt_key:
+    url: "https://nvidia.github.io/nvidia-docker/gpgkey"
+    state: present
+
+- name: Add NVIDIA apt repo
+  get_url:
+    url: "https://nvidia.github.io/nvidia-docker/ubuntu20.04/nvidia-docker.list"
+    dest: "/etc/apt/sources.list.d/nvidia-docker.list"
+    mode: 0644
+
+- name: Update apt cache after adding NVIDIA Docker repository
+  apt:
+    update_cache: yes
+
+- name: Install NVIDIA Container Toolkit
+  apt:
+    name: nvidia-container-toolkit
+    state: present
+
+- name: Restart Docker service to apply NVIDIA changes
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+
+- name: Run a temporary Docker container with NVIDIA GPU support
+  community.docker.docker_container:
+    name: nvidia-smi-test
+    image: nvidia/cuda:latest
+    command: nvidia-smi
+    devices:
+      - /dev/nvidiactl
+      - /dev/nvidia-uvm
+      - /dev/nvidia-uvm-tools
+      - /dev/nvidia-modeset
+    volumes:
+      - /usr/bin/nvidia-smi:/usr/bin/nvidia-smi:ro
+    state: started
+    detach: false
+    cleanup: yes
+  register: nvidia_smi_output
+
+- name: Display nvidia-smi output
+  debug:
+    msg: "{{ nvidia_smi_output }}"

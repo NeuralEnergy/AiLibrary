@@ -6,3 +6,4 @@
   roles:
     - update-gpu
     - docker
+    - nvidia

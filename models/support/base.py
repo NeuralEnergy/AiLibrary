@@ -86,7 +86,10 @@ class BaseServerMonitor:
         self.__timeseries[k] = deque(maxlen=10_000)
       self.__timeseries[k].append(v)
       self.__counts[k] = self.__counts.get(k, 0) + 1
-      if len(self.__timeseries[k]) > 1 and isinstance(v, (int, float)):
+      if (
+        len(self.__timeseries[k]) > 1 and isinstance(v, (int, float))
+        and not isinstance(v, bool)
+      ):
         key1 = k + '_mean'
         dct_results[key1] = round(np.mean(self.__timeseries[k]), 3)
         key2 = k + '_count'
