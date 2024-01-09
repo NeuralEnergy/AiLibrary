@@ -9,19 +9,6 @@ Neural Energy Power Plant project
 @Last Modified by: Neuroplastic Software SRL
 
 
-
-
-TODO:
-  - revizuire si testarea endpoint /support_update_status pentru a asigura ca este 
-    disponibil si functioneaza corect
-    
-  - adaugare analiza pe serie de timp a starii parametrilor de sistem
-  
-  - receptionare de la ingress gateway a tuturor serverelor existente si a 
-    tuturor microserviciilor existente pentru a fi monitorizate
-    
-  - monitorizare individuala a fiecarui server si a fiecarui microserviciu (ping-uri periodice)
-
 """
 import psutil
 

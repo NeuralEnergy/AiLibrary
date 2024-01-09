@@ -21,16 +21,12 @@
 
 # A.2.1
 
-- [ ] Integrarea finala a sistemului de suport:
-  - [ ] Baza de date interna in gateway (serii de timp cu datele de monitorizare continand metricile de performanta)
-  - [ ] Sumarizare in request-ul de`system_status` a informatiilor venite din monitor
-  - [ ] Alertare pentru depasire de praguri de memorie, disk si cpu
-  - [ ] Adaugare/finalizare `support_update_status` pentru fiecare semnatura de tip suport
-- [ ] Elemente nivel jos: adaugarea de monitorizare de procese si thread-uri la nivel de sistem
-- [ ] Endpoint /support_update_status: similar cu sisteme de monitorizare care ofera puncte de verificare a sanatații, este crucial ca acest endpoint sa fie verificat si testat riguros.
-- [ ] Analiza de serie de Timp: aceasta este o direcție de evoluție importanta, care poate îmbogați valoarea datelor colectate, similar cu ce ofera soluții precum InfluxDB (https://www.influxdata.com/).
-- [ ] Recepționarea Listei de servere si Microservicii: aceasta permite scalarea dinamica a monitorizarii, un concept crucial în sisteme reactive.
-- [ ] Monitorizare Individuala: Monitorizarea granulara a fiecarei entitați poate ajuta la diagnosticarea rapida si eficienta a problemelor, similar cu funcționalitațile oferite de Datadog (https://www.datadoghq.com/).
+- [x] Integrarea finala a sistemului de suport:
+  - [x] Baza de date interna in gateway (serii de timp cu datele de monitorizare continand metricile de performanta)
+  - [x] Sumarizare in request-ul de`system_status` a informatiilor venite din monitor
+  - [x] Adaugare/finalizare `support_update_status` pentru fiecare semnatura de tip suport
+- [x] Endpoint /support_update_status: similar cu sisteme de monitorizare care ofera puncte de verificare a sanatații, este crucial ca acest endpoint sa fie verificat si testat riguros.
+- [x] Analiza de serie de Timp: aceasta este o direcție de evoluție importanta, care poate îmbogați valoarea datelor colectate, similar cu ce ofera soluții precum InfluxDB (https://www.influxdata.com/).
 
 
 # A.2.2
