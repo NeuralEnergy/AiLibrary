@@ -1,0 +1,9 @@
+---
+- name: Deploy full
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - stage1-gpu
+    - stage2-docker
+    - stage3-nvidia

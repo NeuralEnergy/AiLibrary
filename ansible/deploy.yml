@@ -1,9 +1,0 @@
----
-- name: Deploy E2
-  hosts: all
-  become: true
-  gather_facts: true
-  roles:
-    - update-gpu
-    - docker
-    - nvidia

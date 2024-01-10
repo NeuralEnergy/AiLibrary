@@ -1,1 +1,1 @@
-ansible-playbook deploy.yml
+ansible-playbook full_deploy.yml
