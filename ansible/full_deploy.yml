@@ -1,9 +1,18 @@
 ---
-- name: Deploy full
-  hosts: all
+- name: Deploy on GPU Workers
+  hosts: kube-workers
   become: true
   gather_facts: true
   roles:
-    - stage1-gpu
-    - stage2-docker
-    - stage3-nvidia
+    - stage01-gpu
+    - stage02-docker
+    - stage03-nvidia
+    - stage09-test
+
+- name: Deploy on Kubernetes Master
+  hosts: kube-masters
+  become: true
+  gather_facts: true
+  roles:
+    - stage02-docker
+    # Add Kubernetes master role here if needed in future
