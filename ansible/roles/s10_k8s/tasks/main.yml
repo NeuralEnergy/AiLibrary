@@ -1,0 +1,223 @@
+---
+# Install Kubernetes Packages
+- name: Install apt-transport-https and other necessary packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - gnupg2
+
+# Add Kubernetes apt repository
+- name: Add Kubernetes apt repository GPG key
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add Kubernetes apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+    state: present
+    filename: kubernetes
+
+- name: Update apt cache after adding Kubernetes repository
+  apt:
+    update_cache: yes
+
+# Disable swap (needed for Kubernetes)
+- name: Disable swap
+  shell: swapoff -a
+
+- name: Stop swap from mounting
+  shell: sed -i 's/^\/swap/#\/swap/g' /etc/fstab
+
+# Install Kubernetes components
+- name: Install kubeadm, kubelet, and kubectl
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - kubeadm
+    - kubelet
+    - kubectl
+
+- name: Marking kubelet, kubeadm, and kubectl to hold versions
+  ansible.builtin.dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+# Initialize Kubernetes Cluster (Only on Master Node)
+- name: Check if Kubernetes is already initialized
+  stat: path=/etc/kubernetes/admin.conf
+  register: k8s_initialized
+  delegate_to: "{{ groups['kube_masters'][0] }}"
+
+# Initialize Kubernetes Cluster (Only on Master Node)
+# Important: Run this task manually only on the master node
+- name: Initialize Kubernetes cluster with kubeadm
+  command: kubeadm init
+  register: kubeadm_init_result
+  failed_when: "'error execution phase preflight' in kubeadm_init_result.stderr"
+  ignore_errors: yes
+  when: 
+    - inventory_hostname in groups['kube_masters']
+    - not k8s_initialized.stat.exists
+
+- name: Show stdout of kubeadm init
+  debug:
+    var: kubeadm_init_result.stdout_lines
+  when: 
+    - inventory_hostname == groups['kube_masters'][0]
+    - not k8s_initialized.stat.exists
+
+- name: Show stderr of kubeadm init
+  debug:
+    var: kubeadm_init_result.stderr_lines
+  when: 
+    - inventory_hostname == groups['kube_masters'][0]
+    - not k8s_initialized.stat.exists
+
+
+- name: Display target home folder
+  debug:
+    msg: "/home/{{ ansible_user }}"
+  when: inventory_hostname in groups['kube_masters']
+
+# Copy Kube config to home directory for kubectl (Only on Master Node)
+- name: Create .kube directory for ansible_user
+  file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    mode: 0755
+  become: yes
+  become_user: "{{ ansible_user }}"
+  when: 
+    - inventory_hostname in groups['kube_masters']
+    - not k8s_initialized.stat.exists
+
+- name: Copy admin.conf to ansible_user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+  become: yes
+  when: 
+    - inventory_hostname in groups['kube_masters']
+    - not k8s_initialized.stat.exists
+
+# sanity restarts following connection refused issues
+- name: Restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+  become: yes
+
+# sanity restarts following connection refused issues
+- name: Restart kubelet service
+  systemd:
+    name: kubelet
+    state: restarted
+
+# Generate join command
+- name: Get join command from master
+  shell: kubeadm token create --print-join-command
+  register: kubernetes_join_command
+  become: yes
+  become_user: "{{ ansible_user }}"
+  when: inventory_hostname in groups['kube_masters']
+  ignore_errors: yes
+
+
+# Setup Pod Network (Only on Master Node)
+# Example: Using Calico. You can replace it with your preferred CNI
+- name: Install Calico network plugin
+  shell: kubectl apply -f https://projectcalico.docs.tigera.io/manifests/calico.yaml
+  become: yes
+  become_user: "{{ ansible_user }}"
+  when: inventory_hostname in groups['kube_masters']
+
+
+- name: Create dummy host to store variable for node config
+  add_host:
+    name: "DUMMY_HOST"
+    JOIN_COMMAND: "{{ kubernetes_join_command.stdout_lines[0] }}"
+
+- name: Display join command
+  debug:
+    msg: "{{ hostvars['DUMMY_HOST']['JOIN_COMMAND'] }}"
+  when: inventory_hostname == groups['kube_masters'][0]
+
+
+# Join Worker Nodes to Cluster
+- name: Check if node is already part of the cluster
+  shell: kubectl get nodes | grep -w {{ inventory_hostname }}
+  register: node_joined
+  delegate_to: "{{ groups['kube_masters'][0] }}"
+  ignore_errors: yes
+
+- name: Join worker nodes to Kubernetes cluster
+  command: "{{ hostvars['DUMMY_HOST']['JOIN_COMMAND'] }}"
+  when: 
+    - not node_joined.stdout
+    - (inventory_hostname in groups['gpu_workers'] or inventory_hostname in groups['non_gpu_workers'])
+  ignore_errors: yes
+
+# Checking the status of all nodes in the cluster. This ensures that all nodes are connected and ready.
+- name: Get node status
+  shell: kubectl get nodes
+  register: node_status
+  delegate_to: "{{ groups['kube_masters'][0] }}"
+
+# Verifying that all nodes are in the Ready state. If a node is not Ready, further investigation is required.
+- name: Verify node status
+  assert:
+    that:
+      - "'Ready' in node_status.stdout"
+    fail_msg: "One or more nodes are not in Ready state."
+    success_msg: "All nodes are in Ready state."
+  
+- name: Display node status
+  debug:
+    msg: "{{ node_status.stdout_lines }}"
+  delegate_to: "{{ groups['kube_masters'][0] }}"
+
+# Installing the NVIDIA device plugin to enable GPU support in the cluster. This plugin is required for pods to utilize NVIDIA GPUs.
+- name: Install NVIDIA device plugin
+  shell: kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.9.0/nvidia-device-plugin.yml
+  when: inventory_hostname in groups['kube_masters']
+
+# Deploying the Kubernetes Dashboard to provide a web-based user interface for the cluster.
+- name: Deploy Kubernetes Dashboard
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+  when: inventory_hostname in groups['kube_masters']
+
+# Create a NodePort service to expose the Kubernetes Dashboard on port 5100
+- name: Expose Kubernetes Dashboard on port 5100
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: dashboard-nodeport
+        namespace: kubernetes-dashboard
+      spec:
+        type: NodePort
+        ports:
+          - port: 443 # Port to expose on the cluster
+            nodePort: 5100 # Port to expose on the node - accessible from outside the cluster
+            targetPort: 8443 # Port to forward to on the pod
+        selector:
+          k8s-app: kubernetes-dashboard
+

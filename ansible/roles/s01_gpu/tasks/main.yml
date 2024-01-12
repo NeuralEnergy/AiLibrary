@@ -93,27 +93,41 @@
   # Runs only if initial nvidia-smi check failed.
   # Waits for the system to be ready after the second reboot.
 
+
+# - name: Check NVIDIA-SMI
+#   command: nvidia-smi
+#   register: nvidia_smi_output
+#   failed_when: nvidia_smi_output.rc != 0
+#   # Verifies that NVIDIA-SMI is functional after driver installation.
+#   # This is a second check to ensure that the NVIDIA drivers were properly installed.
+
+# - name: Extract Driver version
+#   set_fact:
+#     driver_version: "{{ nvidia_smi_output.stdout | regex_search('Driver Version:\\s*(\\S+)', '\\1') | first }}"
+#   # Extracts the NVIDIA driver version from the nvidia-smi output.
+
+# - name: Extract GPU name
+#   set_fact:
+#     gpu_name: "{{ nvidia_smi_output.stdout_lines[8] | regex_search('\\|\\s*([^\\|]+)\\s*\\|', '\\1') | first | trim }}"
+#   # Extracts the GPU name from the nvidia-smi output.
+
+# - name: Output GPU Name and Driver Version
+#   debug:
+#     msg: "GPU: {{ gpu_name }}, NVIDIA Driver Version: {{ driver_version }}"
+#   # Outputs the GPU name and driver version for confirmation.
+
 - name: Check NVIDIA-SMI
-  command: nvidia-smi
+  command: "nvidia-smi --query-gpu=gpu_name,memory.total,driver_version,pci.device_id --format=csv"
   register: nvidia_smi_output
   failed_when: nvidia_smi_output.rc != 0
   # Verifies that NVIDIA-SMI is functional after driver installation.
   # This is a second check to ensure that the NVIDIA drivers were properly installed.
 
-- name: Extract Driver version
-  set_fact:
-    driver_version: "{{ nvidia_smi_output.stdout | regex_search('Driver Version:\\s*(\\S+)', '\\1') | first }}"
-  # Extracts the NVIDIA driver version from the nvidia-smi output.
-
-- name: Extract GPU name
-  set_fact:
-    gpu_name: "{{ nvidia_smi_output.stdout_lines[8] | regex_search('\\|\\s*([^\\|]+)\\s*\\|', '\\1') | first | trim }}"
-  # Extracts the GPU name from the nvidia-smi output.
-
-- name: Output GPU Name and Driver Version
+- name: Output nvidia-smi results
   debug:
-    msg: "GPU: {{ gpu_name }}, NVIDIA Driver Version: {{ driver_version }}"
-  # Outputs the GPU name and driver version for confirmation.
+    msg: "{{ nvidia_smi_output.stdout }}"
+  # Outputs the nvidia-smi results for confirmation.
+
 
 - name: Install nvtop
   apt:

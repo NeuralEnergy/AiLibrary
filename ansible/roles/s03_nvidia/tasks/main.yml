@@ -48,7 +48,7 @@
   docker_container:
     name: nvidia-smi-test
     image: nvidia/cuda:11.6.1-base-ubuntu20.04
-    command: "nvidia-smi --query-gpu=gpu_name,gpu_bus_id,vbios_version --format=csv"
+    command: "nvidia-smi --query-gpu=gpu_name,memory.total,driver_version,pci.device_id --format=csv"
     state: started
     detach: false
     cleanup: yes
@@ -64,7 +64,7 @@
 # Display nvidia-smi output
 - name: Display container nvidia-smi output
   debug:
-    msg: "{{ nvidia_smi_container_output }}"
+    msg: "{{ nvidia_smi_container_output.container.Output }}"
 
 # # The following tasks are usefull only if simple nvidia-smi is run without --query-gpu option
 # - name: Extract Driver version

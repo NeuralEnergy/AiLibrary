@@ -1,4 +1,12 @@
 ---
+
+# Uninstall existing Docker and containerd installations if containerd is detected
+# - name: Remove existing containerd packages
+#   apt:
+#     name:
+#       - containerd.io
+#     state: absent
+
 # Task 1: Update the apt package cache
 # This task updates the local package cache for apt (a package manager used by Debian and Ubuntu).
 # The cache is considered valid if it was updated within the last hour (3600 seconds).
@@ -70,6 +78,10 @@
   changed_when: false
   failed_when: docker_version.rc != 0
 
+- name: Display Docker version
+  debug:
+    msg: "{{ docker_version.stdout }}"
+
 # Additional Test: Check Docker Service Status
 # This task checks if the Docker service is active and running.
 - name: Check Docker Service Status
@@ -77,3 +89,63 @@
   register: docker_service_status
   changed_when: false
   failed_when: "'inactive' in docker_service_status.stdout"
+
+# CRI is must for Kubernetes and containerd is the default CRI for Kubernetes
+- name: Check if CRI is disabled in containerd
+  shell: grep 'disabled_plugins = \["cri"\]' /etc/containerd/config.toml
+  register: cri_disabled_check
+  ignore_errors: yes
+  changed_when: false
+
+
+- name: Get the relevant section of the containerd config file
+  shell: grep -C 2 'cri' /etc/containerd/config.toml
+  register: cri_config_section1
+
+- name: Display the containerd "cri"-related configuration section 
+  debug:
+    msg: "{{ cri_config_section1.stdout_lines }}"
+
+- name: Replace disabled_plugins with enabled_plugins in containerd config
+  replace:
+    path: /etc/containerd/config.toml
+    regexp: '^\s*disabled_plugins\s*=\s*\["cri"\]'
+    replace: 'enabled_plugins = ["cri"]'
+  become: yes
+  when: cri_disabled_check.rc == 0
+
+- name: Get the relevant section of the containerd config file post update
+  shell: grep -C 2 'cri' /etc/containerd/config.toml
+  register: cri_config_section2
+  when: cri_disabled_check.rc == 0
+
+- name: Display the containerd "cri"-related configuration section post update
+  debug:
+    msg: "{{ cri_config_section2.stdout_lines }}"
+  when: cri_disabled_check.rc == 0
+
+- name: Restart containerd
+  systemd:
+    name: containerd
+    state: restarted
+  become: yes
+  when: cri_disabled_check.rc == 0
+
+
+# Task 10: Verify containerd Installation
+- name: Verify containerd Installation
+  command: containerd --version
+  register: containerd_version
+  changed_when: false
+  failed_when: containerd_version.rc != 0
+
+- name: Display containerd version
+  debug:
+    msg: "{{ containerd_version.stdout }}"
+
+# Task 11: Check containerd Service Status
+- name: Check containerd Service Status
+  command: systemctl is-active containerd
+  register: containerd_service_status
+  changed_when: false
+  failed_when: "'inactive' in containerd_service_status.stdout"

@@ -17,4 +17,8 @@ WORKDIR /offense_api
 COPY main.py .
 COPY README.md .
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5050"]
+# Set an environment variable for the port with a default value
+ENV PORT=5050
+
+# Use the environment variable in the CMD instruction
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
