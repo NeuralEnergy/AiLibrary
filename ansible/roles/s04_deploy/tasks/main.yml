@@ -7,7 +7,7 @@
 - name: Gather service facts
   ansible.builtin.service_facts:
 
-- name: Copy -apllmi.service file
+- name: Copy llm_api.service file
   ansible.builtin.template:
     src: llm_api.service.j2
     dest: /etc/systemd/system/llm_api.service
