@@ -9,14 +9,14 @@
 #     - s03_nvidia
 #     - s09_dkr_gpu_test
 
-- name: Deploy service on GPU Worker #1
-  hosts: ne1
-  become: true
-  gather_facts: true
-  vars:
-    llm_api_port: 5080
-  roles:
-    - s04_deploy
+# - name: Deploy service on GPU Worker #1
+#   hosts: ne1
+#   become: true
+#   gather_facts: true
+#   vars:
+#     llm_api_port: 5080
+#   roles:
+#     - s04_deploy
 
 # - name: Deploy on NON-GPU Workers
 #   hosts: non_gpu_workers
@@ -32,12 +32,12 @@
 #   roles:
 #     - s02_docker
 
-# - name: Deploy Kubernetes using unified role
-#   hosts: all
-#   become: true
-#   gather_facts: true
-#   roles:
-#     - s10_k8s
+- name: Deploy Kubernetes using unified role
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - s10_k8s
 
 # - name: Run final test on master
 #   hosts: kube_masters

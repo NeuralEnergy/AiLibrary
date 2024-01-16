@@ -4,6 +4,11 @@
 @Copyright: Neural Energy SRL
 
 
+prerequisites:
+```bash
+pip install ansible kubernetes 
+```
+
 If repo issue:
 
 run

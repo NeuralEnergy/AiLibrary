@@ -90,13 +90,40 @@
   changed_when: false
   failed_when: "'inactive' in docker_service_status.stdout"
 
-# CRI is must for Kubernetes and containerd is the default CRI for Kubernetes
-- name: Check if CRI is disabled in containerd
-  shell: grep 'disabled_plugins = \["cri"\]' /etc/containerd/config.toml
-  register: cri_disabled_check
+- name: Check if config.toml exists and has desired settings
+  shell: |
+    if [ -f /etc/containerd/config.toml ]; then
+      grep -q 'SystemdCgroup = true' /etc/containerd/config.toml &&
+      grep -q 'enabled_plugins = ["cri"]' /etc/containerd/config.toml
+    else
+      exit 1
+    fi
+  register: containerd_config_check
   ignore_errors: yes
-  changed_when: false
 
+- name: Generate default containerd configuration
+  command: containerd config default > /etc/containerd/config.toml
+  when: containerd_config_check.rc != 0
+
+- name: Set SystemdCgroup to true
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^(SystemdCgroup\s*=\s*).*$'
+    line: 'SystemdCgroup = true'
+  when: containerd_config_check.rc != 0
+
+- name: Enable CRI plugin
+  lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^\s*disabled_plugins\s*='
+    line: 'enabled_plugins = ["cri"]'
+  when: containerd_config_check.rc != 0
+
+- name: Restart containerd service
+  service:
+    name: containerd
+    state: restarted
+  when: containerd_config_check.rc != 0
 
 - name: Get the relevant section of the containerd config file
   shell: grep -C 2 'cri' /etc/containerd/config.toml
@@ -105,31 +132,6 @@
 - name: Display the containerd "cri"-related configuration section 
   debug:
     msg: "{{ cri_config_section1.stdout_lines }}"
-
-- name: Replace disabled_plugins with enabled_plugins in containerd config
-  replace:
-    path: /etc/containerd/config.toml
-    regexp: '^\s*disabled_plugins\s*=\s*\["cri"\]'
-    replace: 'enabled_plugins = ["cri"]'
-  become: yes
-  when: cri_disabled_check.rc == 0
-
-- name: Get the relevant section of the containerd config file post update
-  shell: grep -C 2 'cri' /etc/containerd/config.toml
-  register: cri_config_section2
-  when: cri_disabled_check.rc == 0
-
-- name: Display the containerd "cri"-related configuration section post update
-  debug:
-    msg: "{{ cri_config_section2.stdout_lines }}"
-  when: cri_disabled_check.rc == 0
-
-- name: Restart containerd
-  systemd:
-    name: containerd
-    state: restarted
-  become: yes
-  when: cri_disabled_check.rc == 0
 
 
 # Task 10: Verify containerd Installation
