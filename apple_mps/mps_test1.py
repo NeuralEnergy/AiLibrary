@@ -24,6 +24,7 @@ Average MPS Inference Time: 0.0233 seconds
 import os
 import torch as th
 import torchvision as tv
+import json
 
 import time
 import numpy as np
@@ -42,14 +43,17 @@ if __name__ == '__main__':
     print("MPS is available.")
     dev = th.device('mps')
     print("Running benchmark...")
+    
+    weights = tv.models.MobileNet_V3_Large_Weights.DEFAULT
+    labels = weights.meta['categories']
 
     print("Loading CPU model...")
     model_cpu = tv.models.mobilenet_v3_large(
-      weights=tv.models.MobileNet_V3_Large_Weights.DEFAULT
+      weights=weights
     )
     print("Loading MPS model...")
     model_mps = tv.models.mobilenet_v3_large(
-      weights=tv.models.MobileNet_V3_Large_Weights.DEFAULT
+      weights=weights
     )
     model_mps = model_mps.to(dev)  # Apply 'to(dev)' to MPS model
 
@@ -65,7 +69,7 @@ if __name__ == '__main__':
     ]
     imgs = [tv.io.read_image(f) / 255. for f in FILES]
 
-    num_iterations = 50  # You can adjust the number of iterations as needed
+    num_iterations = 20  # You can adjust the number of iterations as needed
 
     # Warm-up models
     for i in range(1, 5):
@@ -76,24 +80,35 @@ if __name__ == '__main__':
 
     cpu_timings = []
     mps_timings = []
+    
+    results = {}
 
     for i in range(num_iterations):
+      img_id = i % len(imgs)
       if i % 10 == 0:
         print("Running iteration {}".format(i), flush=True)
       with th.no_grad():
         # CPU Inference
         start_time = time.time()
-        result_cpu = model_cpu(imgs[i % len(imgs)].unsqueeze(0))
+        result_cpu = model_cpu(imgs[img_id].unsqueeze(0))
         end_time = time.time()
         cpu_timings.append(end_time - start_time)
 
         # MPS Inference
         start_time = time.time()
-        th_img_mps = imgs[i % len(imgs)].to(dev)  # Apply 'to(dev)' only at forward time
+        th_img_mps = imgs[img_id].to(dev)  # Apply 'to(dev)' only at forward time
         result_mps = model_mps(th_img_mps.unsqueeze(0))
         end_time = time.time()
         mps_timings.append(end_time - start_time)
+        
+        
+        results['image_{}'.format(img_id)] = {
+          'cpu': labels[result_cpu.argmax(-1).item()],
+          'mps': labels[result_mps.argmax(-1).item()]
+        }
 
+    print("Results: ", json.dumps(results, indent=2))
+  
     # Calculate averages using NumPy
     cpu_avg_time = np.mean(cpu_timings)
     mps_avg_time = np.mean(mps_timings)
